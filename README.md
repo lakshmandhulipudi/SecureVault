@@ -1,102 +1,159 @@
-# 🔐 SecureVault - Password Vault & Credential Management System
+# SecureVault - Password Vault & Credential Management System
 
-A secure Password Vault application built using **React, Spring Boot, and PostgreSQL**. The application allows users to securely manage their credentials with authentication, OTP-based password reset, and a modern dashboard.
+SecureVault is a full-stack Password Vault application built using React, Spring Boot, and PostgreSQL. It allows users to securely store, manage, and organize their credentials with OTP-based password recovery and a modern dashboard.
 
 ---
 
-## 🚀 Features
+# Features
 
-### 🔑 Authentication
+## Authentication
+
 - User Registration
-- User Login
-- BCrypt Password Encryption
+- Secure Login
 - Forgot Password
 - OTP Verification via Email
 - Reset Password
 - Logout
 - Protected Routes
 
-### 🔒 Credential Management
-- Add Credential
+---
+
+## Credential Management
+
+- Add Credentials
 - View Credentials
-- Update Credential
-- Delete Credential
+- Update Credentials
+- Delete Credentials
 - Search Credentials
 - Favourite Credentials
 - Show / Hide Password
 - Copy Password
 
-### 📊 Dashboard
+---
+
+## Dashboard
+
 - Total Credentials
-- Favourite Credentials Count
+- Favourite Credentials
 - Categories Count
 - Recent Credentials
 
-### 👤 Profile
+---
+
+## Profile
+
 - View Username
 - View Email
 
 ---
 
-## 🛠️ Tech Stack
+# Technology Stack
 
 ### Frontend
+
 - React.js
 - React Router DOM
 - Axios
 - Bootstrap 5
 
 ### Backend
+
 - Spring Boot
 - Spring Security
 - Spring Data JPA
 - Java Mail Sender
 
 ### Database
+
 - PostgreSQL
 
 ---
 
-## 📂 Project Structure
+# Project Structure
 
 ```
 SecureVault
 │
 ├── frontend
-│   ├── Components
-│   ├── Pages
-│   ├── Services
-│   └── App.jsx
-│
 ├── backend
-│   ├── Controller
-│   ├── Service
-│   ├── Repository
-│   ├── Entity
-│   ├── DTO
-│   └── Config
-│
-└── PostgreSQL
+├── screenshots
+└── README.md
 ```
 
 ---
 
-## ⚙️ Installation
+# Screenshots
 
-### Clone Repository
+## Login
+
+![Login](screenshots/login.png)
+
+---
+
+## Register
+
+![Register](screenshots/register.png)
+
+---
+
+## Forgot Password
+
+![Forgot Password](screenshots/forgot-password.png)
+
+---
+
+## Verify OTP
+
+![Verify OTP](screenshots/verify-otp.png)
+
+---
+
+## Reset Password
+
+![Reset Password](screenshots/reset-password.png)
+
+---
+
+## Dashboard
+
+![Dashboard](screenshots/dashboard.png)
+
+---
+
+## Add Credential
+
+![Add Credential](screenshots/add-credential.png)
+
+---
+
+## Saved Credentials
+
+![Credentials](screenshots/credentials.png)
+
+---
+
+## Profile
+
+![Profile](screenshots/profile.png)
+
+---
+
+# Installation
+
+## Clone Repository
 
 ```bash
 git clone https://github.com/lakshmandhulipudi/SecureVault.git
 ```
 
-### Backend
+## Backend
 
 ```bash
 cd backend
 mvn spring-boot:run
 ```
 
-### Frontend
+## Frontend
 
 ```bash
 cd frontend
@@ -106,36 +163,20 @@ npm run dev
 
 ---
 
-## 📸 Screenshots
-
-- Login Page
-- Registration Page
-- Forgot Password
-- OTP Verification
-- Reset Password
-- Dashboard
-- Add Credential
-- View Credentials
-- Profile Page
-
-(Add screenshots later)
-
----
-
-## 📌 Future Enhancements
+# Future Enhancements
 
 - Password Generator
 - Password Strength Meter
 - Website URL Support
 - Notes for Credentials
+- AES Password Encryption
 - Export Credentials
 - Import Credentials
 - Dark Mode
-- AES Password Encryption
 
 ---
 
-## 👨‍💻 Author
+# Author
 
 **Dhulipudi Lakshman**
 
