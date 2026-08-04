@@ -49,21 +49,21 @@ SecureVault is a full-stack Password Vault application built using React, Spring
 
 # Technology Stack
 
-### Frontend
+## Frontend
 
 - React.js
 - React Router DOM
 - Axios
 - Bootstrap 5
 
-### Backend
+## Backend
 
 - Spring Boot
 - Spring Security
 - Spring Data JPA
 - Java Mail Sender
 
-### Database
+## Database
 
 - PostgreSQL
 
@@ -71,7 +71,7 @@ SecureVault is a full-stack Password Vault application built using React, Spring
 
 # Project Structure
 
-```
+```text
 SecureVault
 │
 ├── frontend
@@ -98,19 +98,19 @@ SecureVault
 
 ## Forgot Password
 
-![Forgot Password](screenshots/forgot-password.png)
+![Forgot Password](screenshots/forgotpassword.png)
 
 ---
 
 ## Verify OTP
 
-![Verify OTP](screenshots/verify-otp.png)
+![Verify OTP](screenshots/verifyotp.png)
 
 ---
 
 ## Reset Password
 
-![Reset Password](screenshots/reset-password.png)
+![Reset Password](screenshots/resetpassword.png)
 
 ---
 
@@ -122,7 +122,7 @@ SecureVault
 
 ## Add Credential
 
-![Add Credential](screenshots/add-credential.png)
+![Add Credential](screenshots/addcredentials.png)
 
 ---
 
@@ -180,5 +180,5 @@ npm run dev
 
 **Dhulipudi Lakshman**
 
-GitHub:
+GitHub:  
 https://github.com/lakshmandhulipudi
