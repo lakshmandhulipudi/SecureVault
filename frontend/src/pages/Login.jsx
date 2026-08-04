@@ -3,100 +3,201 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const navigate = useNavigate();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
-  const handleLogin = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:8080/api/auth/login",
-        {
-          email,
-          password,
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+
+    const handleLogin = async () => {
+
+        try {
+
+            const response = await axios.post(
+                "http://localhost:8080/api/auth/login",
+                {
+                    email,
+                    password
+                }
+            );
+
+            alert(response.data.message);
+
+            localStorage.setItem("email", response.data.email);
+            localStorage.setItem("username", response.data.username);
+
+            navigate("/dashboard");
+
+        } catch (error) {
+
+            if (error.response) {
+
+                alert(error.response.data.message || "Login Failed");
+
+            } else {
+
+                alert("Server not running");
+
+            }
+
         }
-      );
 
-      alert(response.data.message);
+    };
 
-      navigate("/dashboard");
-    } catch (error) {
-      if (error.response) {
-        alert(error.response.data.message || "Login Failed");
-      } else {
-        alert("Server not running");
-      }
-    }
-  };
+    return (
 
-  return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-5">
+        <div
+            className="d-flex justify-content-center align-items-center"
+            style={{
+                minHeight: "100vh",
+                background:
+                    "linear-gradient(135deg,#1e3c72,#2a5298)"
+            }}
+        >
 
-          <div className="card shadow p-4">
-
-            <h2 className="text-center mb-4">
-              SecureVault Login
-            </h2>
-
-            <div className="mb-3">
-              <label>Email</label>
-              <input
-                type="email"
-                className="form-control"
-                placeholder="Enter Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-
-            <div className="mb-3">
-              <label>Password</label>
-              <input
-                type="password"
-                className="form-control"
-                placeholder="Enter Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-
-            <button
-              className="btn btn-primary w-100"
-              onClick={handleLogin}
+            <div
+                className="card shadow-lg border-0"
+                style={{
+                    width: "420px",
+                    borderRadius: "20px"
+                }}
             >
-              Login
-            </button>
 
-            {/* Forgot Password */}
-            <p className="text-center mt-3 mb-2">
-              <button
-                className="btn btn-link text-decoration-none p-0"
-                onClick={() => navigate("/forgot-password")}
-              >
-                Forgot Password?
-              </button>
-            </p>
+                <div className="card-body p-5">
 
-            <p className="text-center">
-              Don't have an account?
-            </p>
+                    <div className="text-center mb-4">
 
-            <button
-              className="btn btn-success w-100"
-              onClick={() => navigate("/register")}
-            >
-              Register
-            </button>
+                        <h1>🔐</h1>
 
-          </div>
+                        <h2 className="fw-bold">
+
+                            SecureVault
+
+                        </h2>
+
+                        <p className="text-muted">
+
+                            Secure Password Management
+
+                        </p>
+
+                    </div>
+
+                    <div className="mb-3">
+
+                        <label className="fw-semibold">
+
+                            Email
+
+                        </label>
+
+                        <input
+                            type="email"
+                            className="form-control form-control-lg"
+                            placeholder="Enter Email"
+                            value={email}
+                            onChange={(e) =>
+                                setEmail(e.target.value)
+                            }
+                        />
+
+                    </div>
+
+                    <div className="mb-4">
+
+                        <label className="fw-semibold">
+
+                            Password
+
+                        </label>
+
+                        <div className="input-group">
+
+                            <input
+                                type={
+                                    showPassword
+                                        ? "text"
+                                        : "password"
+                                }
+                                className="form-control form-control-lg"
+                                placeholder="Enter Password"
+                                value={password}
+                                onChange={(e) =>
+                                    setPassword(e.target.value)
+                                }
+                            />
+
+                            <button
+                                className="btn btn-outline-secondary"
+                                onClick={() =>
+                                    setShowPassword(!showPassword)
+                                }
+                            >
+
+                                {showPassword ? "🙈" : "👁"}
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        className="btn btn-primary btn-lg w-100"
+                        onClick={handleLogin}
+                    >
+
+                        Login
+
+                    </button>
+
+                    <div className="text-center mt-4">
+
+                        <button
+                            className="btn btn-link text-decoration-none"
+                            onClick={() =>
+                                navigate("/forgot-password")
+                            }
+                        >
+
+                            Forgot Password?
+
+                        </button>
+
+                    </div>
+
+                    <hr />
+
+                    <div className="text-center">
+
+                        <p>
+
+                            Don't have an account?
+
+                        </p>
+
+                        <button
+                            className="btn btn-success w-100"
+                            onClick={() =>
+                                navigate("/register")
+                            }
+                        >
+
+                            Create Account
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
-      </div>
-    </div>
-  );
+
+    );
+
 }
 
 export default Login;

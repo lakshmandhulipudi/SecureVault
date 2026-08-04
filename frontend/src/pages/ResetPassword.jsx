@@ -4,96 +4,175 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 function ResetPassword() {
 
-  const navigate = useNavigate();
-  const location = useLocation();
+    const navigate = useNavigate();
+    const location = useLocation();
 
-  const email = location.state?.email || "";
+    const email = location.state?.email || "";
 
-  const [newPassword, setNewPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
 
-  const resetPassword = async () => {
+    const resetPassword = async () => {
 
-    try {
+        if (!newPassword) {
 
-      const response = await axios.post(
-        "http://localhost:8080/api/password/reset",
-        {
-          email: email,
-          newPassword: newPassword
+            alert("Please enter a new password");
+
+            return;
+
         }
-      );
 
-      alert(response.data);
+        try {
 
-      navigate("/");
+            const response = await axios.post(
+                "http://localhost:8080/api/password/reset",
+                {
+                    email,
+                    newPassword
+                }
+            );
 
-    } catch (error) {
+            alert(response.data);
 
-      if (error.response) {
-        alert(error.response.data.message || error.response.data);
-      } else {
-        alert("Server not running");
-      }
+            navigate("/");
 
-    }
+        } catch (error) {
 
-  };
+            if (error.response) {
 
-  return (
-    <div className="container mt-5">
+                alert(error.response.data.message || error.response.data);
 
-      <div className="row justify-content-center">
+            } else {
 
-        <div className="col-md-5">
+                alert("Server not running");
 
-          <div className="card shadow p-4">
+            }
 
-            <h2 className="text-center mb-4">
-              Reset Password
-            </h2>
+        }
 
-            <div className="mb-3">
+    };
 
-              <label>Email</label>
+    return (
 
-              <input
-                type="email"
-                className="form-control"
-                value={email}
-                readOnly
-              />
+        <div
+            className="d-flex justify-content-center align-items-center"
+            style={{
+                minHeight: "100vh",
+                background: "linear-gradient(135deg,#1e3c72,#2a5298)"
+            }}
+        >
 
-            </div>
-
-            <div className="mb-3">
-
-              <label>New Password</label>
-
-              <input
-                type="password"
-                className="form-control"
-                placeholder="Enter New Password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-              />
-
-            </div>
-
-            <button
-              className="btn btn-success w-100"
-              onClick={resetPassword}
+            <div
+                className="card shadow-lg border-0"
+                style={{
+                    width: "450px",
+                    borderRadius: "20px"
+                }}
             >
-              Reset Password
-            </button>
 
-          </div>
+                <div className="card-body p-5">
+
+                    <div className="text-center mb-4">
+
+                        <h1>🔑</h1>
+
+                        <h2 className="fw-bold">
+
+                            Reset Password
+
+                        </h2>
+
+                        <p className="text-muted">
+
+                            Create a strong new password for your account.
+
+                        </p>
+
+                    </div>
+
+                    <div className="mb-3">
+
+                        <label className="fw-semibold">
+
+                            Email Address
+
+                        </label>
+
+                        <input
+                            type="email"
+                            className="form-control form-control-lg"
+                            value={email}
+                            readOnly
+                        />
+
+                    </div>
+
+                    <div className="mb-4">
+
+                        <label className="fw-semibold">
+
+                            New Password
+
+                        </label>
+
+                        <div className="input-group">
+
+                            <input
+                                type={
+                                    showPassword
+                                        ? "text"
+                                        : "password"
+                                }
+                                className="form-control form-control-lg"
+                                placeholder="Enter New Password"
+                                value={newPassword}
+                                onChange={(e) =>
+                                    setNewPassword(e.target.value)
+                                }
+                            />
+
+                            <button
+                                type="button"
+                                className="btn btn-outline-secondary"
+                                onClick={() =>
+                                    setShowPassword(!showPassword)
+                                }
+                            >
+                                {showPassword ? "🙈" : "👁"}
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        className="btn btn-success btn-lg w-100"
+                        onClick={resetPassword}
+                    >
+
+                        🔄 Reset Password
+
+                    </button>
+
+                    <hr />
+
+                    <button
+                        className="btn btn-outline-secondary w-100"
+                        onClick={() => navigate("/")}
+                    >
+
+                        ⬅ Back to Login
+
+                    </button>
+
+                </div>
+
+            </div>
 
         </div>
 
-      </div>
+    );
 
-    </div>
-  );
 }
 
 export default ResetPassword;

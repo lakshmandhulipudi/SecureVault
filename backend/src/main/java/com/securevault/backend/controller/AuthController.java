@@ -1,10 +1,11 @@
 package com.securevault.backend.controller;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.securevault.backend.dto.LoginRequest;
@@ -39,4 +40,12 @@ public class AuthController {
 
         return ResponseEntity.ok(response);
     }
+    @GetMapping("/profile")
+public ResponseEntity<User> getProfile(
+        @RequestParam String email) {
+
+    User user = authService.getProfile(email);
+
+    return ResponseEntity.ok(user);
+}
 }

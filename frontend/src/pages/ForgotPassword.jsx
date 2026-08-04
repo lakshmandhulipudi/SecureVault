@@ -4,94 +4,145 @@ import { useNavigate } from "react-router-dom";
 
 function ForgotPassword() {
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const [email, setEmail] = useState("");
+    const [email, setEmail] = useState("");
 
-  const sendOtp = async () => {
+    const sendOtp = async () => {
 
-    if (!email) {
-      alert("Please enter your email");
-      return;
-    }
+        if (!email) {
 
-    try {
+            alert("Please enter your email");
 
-      const response = await axios.post(
-        "http://localhost:8080/api/password/forgot",
-        {
-          email: email,
+            return;
+
         }
-      );
 
-      alert(response.data);
+        try {
 
-      navigate("/verify-otp", {
-        state: {
-          email: email,
-        },
-      });
+            const response = await axios.post(
 
-    } catch (error) {
+                "http://localhost:8080/api/password/forgot",
 
-      if (error.response) {
-        alert(error.response.data);
-      } else {
-        alert("Server not running");
-      }
+                {
+                    email
+                }
 
-    }
-  };
+            );
 
-  return (
-    <div className="container mt-5">
+            alert(response.data);
 
-      <div className="row justify-content-center">
+            navigate("/verify-otp", {
 
-        <div className="col-md-5">
+                state: {
+                    email
+                }
 
-          <div className="card shadow p-4">
+            });
 
-            <h2 className="text-center mb-4">
-              Forgot Password
-            </h2>
+        } catch (error) {
 
-            <div className="mb-3">
+            if (error.response) {
 
-              <label>Email</label>
+                alert(error.response.data);
 
-              <input
-                type="email"
-                className="form-control"
-                placeholder="Enter your registered email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+            } else {
+
+                alert("Server not running");
+
+            }
+
+        }
+
+    };
+
+    return (
+
+        <div
+            className="d-flex justify-content-center align-items-center"
+            style={{
+                minHeight: "100vh",
+                background:
+                    "linear-gradient(135deg,#1e3c72,#2a5298)"
+            }}
+        >
+
+            <div
+                className="card shadow-lg border-0"
+                style={{
+                    width: "450px",
+                    borderRadius: "20px"
+                }}
+            >
+
+                <div className="card-body p-5">
+
+                    <div className="text-center mb-4">
+
+                        <h1>📧</h1>
+
+                        <h2 className="fw-bold">
+
+                            Forgot Password
+
+                        </h2>
+
+                        <p className="text-muted">
+
+                            Enter your registered email to receive an OTP.
+
+                        </p>
+
+                    </div>
+
+                    <div className="mb-4">
+
+                        <label className="fw-semibold">
+
+                            Email Address
+
+                        </label>
+
+                        <input
+                            type="email"
+                            className="form-control form-control-lg"
+                            placeholder="Enter your registered email"
+                            value={email}
+                            onChange={(e) =>
+                                setEmail(e.target.value)
+                            }
+                        />
+
+                    </div>
+
+                    <button
+                        className="btn btn-primary btn-lg w-100"
+                        onClick={sendOtp}
+                    >
+
+                        📩 Send OTP
+
+                    </button>
+
+                    <hr />
+
+                    <button
+                        className="btn btn-outline-secondary w-100"
+                        onClick={() => navigate("/")}
+                    >
+
+                        ⬅ Back to Login
+
+                    </button>
+
+                </div>
 
             </div>
 
-            <button
-              className="btn btn-primary w-100"
-              onClick={sendOtp}
-            >
-              Send OTP
-            </button>
-
-            <button
-              className="btn btn-secondary w-100 mt-3"
-              onClick={() => navigate("/")}
-            >
-              Back to Login
-            </button>
-
-          </div>
-
         </div>
 
-      </div>
+    );
 
-    </div>
-  );
 }
 
 export default ForgotPassword;

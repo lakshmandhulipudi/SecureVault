@@ -87,4 +87,10 @@ public class AuthService {
 
         return "Password Reset Successful";
     }
+    public User getProfile(String email) {
+
+    return userRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+}
 }
