@@ -9,6 +9,7 @@ import com.securevault.backend.entity.Credential;
 import com.securevault.backend.entity.User;
 import com.securevault.backend.repository.CredentialRepository;
 import com.securevault.backend.repository.UserRepository;
+import com.securevault.backend.utils.AESUtil;
 
 @Service
 public class CredentialService {
@@ -34,7 +35,12 @@ public class CredentialService {
 
         credential.setWebsite(request.getWebsite());
         credential.setUsername(request.getUsername());
-        credential.setPassword(request.getPassword());
+
+        // Encrypt Password
+        credential.setPassword(
+                AESUtil.encrypt(request.getPassword())
+        );
+
         credential.setCategory(request.getCategory());
         credential.setFavourite(request.isFavourite());
         credential.setUser(user);
@@ -48,7 +54,21 @@ public class CredentialService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return credentialRepository.findByUser(user);
+        List<Credential> credentials =
+                credentialRepository.findByUser(user);
+
+        // Decrypt Passwords
+        for (Credential credential : credentials) {
+
+            credential.setPassword(
+                    AESUtil.decrypt(
+                            credential.getPassword()
+                    )
+            );
+
+        }
+
+        return credentials;
     }
 
     // Delete Credential
@@ -67,11 +87,24 @@ public class CredentialService {
 
         credential.setWebsite(request.getWebsite());
         credential.setUsername(request.getUsername());
-        credential.setPassword(request.getPassword());
+
+        // Encrypt Updated Password
+        credential.setPassword(
+                AESUtil.encrypt(request.getPassword())
+        );
+
         credential.setCategory(request.getCategory());
         credential.setFavourite(request.isFavourite());
 
-        return credentialRepository.save(credential);
+        Credential updatedCredential =
+                credentialRepository.save(credential);
+
+        // Decrypt before sending response
+        updatedCredential.setPassword(
+                AESUtil.decrypt(updatedCredential.getPassword())
+        );
+
+        return updatedCredential;
     }
 
 }

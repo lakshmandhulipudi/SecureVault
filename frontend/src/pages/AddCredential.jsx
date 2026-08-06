@@ -17,6 +17,60 @@ function AddCredential() {
         favourite: false
     });
 
+    const [strength, setStrength] = useState("");
+
+    const checkStrength = (password) => {
+
+        let score = 0;
+
+        if (password.length >= 8) score++;
+        if (/[A-Z]/.test(password)) score++;
+        if (/[a-z]/.test(password)) score++;
+        if (/[0-9]/.test(password)) score++;
+        if (/[@#$%&*!?]/.test(password)) score++;
+
+        if (score <= 2)
+            setStrength("Weak");
+        else if (score <= 4)
+            setStrength("Medium");
+        else
+            setStrength("Strong");
+    };
+
+    const generatePassword = () => {
+
+        const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const lower = "abcdefghijklmnopqrstuvwxyz";
+        const numbers = "0123456789";
+        const special = "@#$%&*!?";
+        const all = upper + lower + numbers + special;
+
+        let password = "";
+
+        password += upper[Math.floor(Math.random() * upper.length)];
+        password += lower[Math.floor(Math.random() * lower.length)];
+        password += numbers[Math.floor(Math.random() * numbers.length)];
+        password += special[Math.floor(Math.random() * special.length)];
+
+        for (let i = 4; i < 12; i++) {
+
+            password += all[Math.floor(Math.random() * all.length)];
+
+        }
+
+        password = password
+            .split("")
+            .sort(() => Math.random() - 0.5)
+            .join("");
+
+        setCredential({
+            ...credential,
+            password: password
+        });
+
+        checkStrength(password);
+    };
+
     const handleChange = (e) => {
 
         const { name, value, type, checked } = e.target;
@@ -25,6 +79,12 @@ function AddCredential() {
             ...credential,
             [name]: type === "checkbox" ? checked : value
         });
+
+        if (name === "password") {
+
+            checkStrength(value);
+
+        }
 
     };
 
@@ -114,17 +174,51 @@ function AddCredential() {
 
                                 <div className="mb-3">
 
-                                    <input
-                                        type="password"
-                                        className="form-control form-control-lg"
-                                        placeholder="Password"
-                                        name="password"
-                                        value={credential.password}
-                                        onChange={handleChange}
-                                        required
-                                    />
+                                    <div className="input-group">
+
+                                        <input
+                                            type="text"
+                                            className="form-control form-control-lg"
+                                            placeholder="Password"
+                                            name="password"
+                                            value={credential.password}
+                                            onChange={handleChange}
+                                            required
+                                        />
+
+                                        <button
+                                            type="button"
+                                            className="btn btn-success"
+                                            onClick={generatePassword}
+                                        >
+                                            Generate Password
+                                        </button>
+
+                                    </div>
 
                                 </div>
+
+                                {strength && (
+
+                                    <div className="mb-3">
+
+                                        <strong>Password Strength : </strong>
+
+                                        <span
+                                            className={
+                                                strength === "Strong"
+                                                    ? "text-success"
+                                                    : strength === "Medium"
+                                                        ? "text-warning"
+                                                        : "text-danger"
+                                            }
+                                        >
+                                            {strength}
+                                        </span>
+
+                                    </div>
+
+                                )}
 
                                 <div className="mb-3">
 
@@ -136,7 +230,10 @@ function AddCredential() {
                                         required
                                     >
 
-                                        <option value="">Select Category</option>
+                                        <option value="">
+                                            Select Category
+                                        </option>
+
                                         <option>Social</option>
                                         <option>Banking</option>
                                         <option>Work</option>
