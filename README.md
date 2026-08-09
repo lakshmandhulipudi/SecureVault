@@ -102,13 +102,13 @@ SecureVault
 
 ### Verify OTP
 
-![Verify OTP](./screenshots/verifyOtp.png)
+![Verify OTP](./screenshots/verifyotp.png)
 
 ---
 
 ### Reset Password
 
-![Reset Password](./screenshots/resetPassword.png)
+![Reset Password](./screenshots/resetpassword.png)
 
 ---
 
@@ -120,17 +120,17 @@ SecureVault
 
 ### Add Credential
 
-![Add Credential](./screenshots/AddCredentials.png)
+![Add Credential](./screenshots/Addcredentials.png)
 
 ---
 ### Share Credential
 
-![Share Credential](./screenshots/sharedCredential.png)
+![Share Credential](./screenshots/sharedcredential.png)
 
 ---
 ### Saved Credentials
 
-![Credentials](./screenshots/Credentials.png)
+![Credentials](./screenshots/credentials.png)
 
 ---
 
