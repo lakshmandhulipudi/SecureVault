@@ -102,7 +102,7 @@ SecureVault
 
 ### Verify OTP
 
-![Verify OTP](./screenshots/verifyotp.png)
+![Verify OTP](./screenshots/verifyOtp.png)
 
 ---
 
@@ -120,7 +120,7 @@ SecureVault
 
 ### Add Credential
 
-![Add Credential](./screenshots/Addcredentials.png)
+![Add Credential](./screenshots/AddCredentials.png)
 
 ---
 
