@@ -25,44 +25,86 @@ public class CredentialController {
 
     private final CredentialService credentialService;
 
-    public CredentialController(CredentialService credentialService) {
+    public CredentialController(
+            CredentialService credentialService) {
 
         this.credentialService = credentialService;
-
     }
 
+    // Add Credential
     @PostMapping
     public ResponseEntity<Credential> addCredential(
             @RequestParam String email,
             @RequestBody CredentialRequest request) {
 
         return ResponseEntity.ok(
-                credentialService.addCredential(email, request));
+                credentialService.addCredential(
+                        email,
+                        request
+                )
+        );
     }
 
+    // Get Own + Shared Credentials
     @GetMapping
     public ResponseEntity<List<Credential>> getCredentials(
             @RequestParam String email) {
 
         return ResponseEntity.ok(
-                credentialService.getCredentials(email));
+                credentialService.getCredentials(email)
+        );
     }
 
+    // Share Credential
+    @PostMapping("/{id}/share")
+    public ResponseEntity<String> shareCredential(
+            @PathVariable Long id,
+            @RequestParam String ownerEmail,
+            @RequestParam Long recipientUserId) {
+
+        try {
+
+            credentialService.shareCredential(
+                    id,
+                    ownerEmail,
+                    recipientUserId
+            );
+
+            return ResponseEntity.ok(
+                    "Credential shared successfully"
+            );
+
+        } catch (RuntimeException e) {
+
+            return ResponseEntity
+                    .badRequest()
+                    .body(e.getMessage());
+        }
+    }
+
+    // Delete Credential
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCredential(
             @PathVariable Long id) {
 
         credentialService.deleteCredential(id);
 
-        return ResponseEntity.ok("Credential Deleted Successfully");
+        return ResponseEntity.ok(
+                "Credential Deleted Successfully"
+        );
     }
+
+    // Update Credential
     @PutMapping("/{id}")
-public ResponseEntity<Credential> updateCredential(
-        @PathVariable Long id,
-        @RequestBody CredentialRequest request) {
+    public ResponseEntity<Credential> updateCredential(
+            @PathVariable Long id,
+            @RequestBody CredentialRequest request) {
 
-    return ResponseEntity.ok(
-            credentialService.updateCredential(id, request));
-}
-
+        return ResponseEntity.ok(
+                credentialService.updateCredential(
+                        id,
+                        request
+                )
+        );
+    }
 }

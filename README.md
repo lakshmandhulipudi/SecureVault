@@ -1,6 +1,6 @@
 # SecureVault - Password Vault & Credential Management System
 
-SecureVault is a full-stack Password Vault application built using React, Spring Boot, and PostgreSQL. It allows users to securely store, manage, and organize credentials securely with OTP-based password recovery.
+SecureVault is a full-stack Password Vault application built using React, Spring Boot, and PostgreSQL. It allows users to securely store, manage, and organize their credentials with OTP-based password recovery, AES encryption, password generation, password strength checking, and secure credential sharing.
 
 ---
 
@@ -26,6 +26,10 @@ SecureVault is a full-stack Password Vault application built using React, Spring
 - Favourite Credentials
 - Show / Hide Password
 - Copy Password
+- AES Password Encryption
+- Password Generator
+- Password Strength Checker
+- Secure Credential Sharing
 
 ### Dashboard
 
@@ -104,7 +108,7 @@ SecureVault
 
 ### Reset Password
 
-![Reset Password](./screenshots/resetpassword.png)
+![Reset Password](./screenshots/resetPassword.png)
 
 ---
 
@@ -116,13 +120,13 @@ SecureVault
 
 ### Add Credential
 
-![Add Credential](./screenshots/addcredentials.png)
+![Add Credential](./screenshots/Addcredentials.png)
 
 ---
 
 ### Saved Credentials
 
-![Credentials](./screenshots/credentials.png)
+![Credentials](./screenshots/Credentials.png)
 
 ---
 
@@ -159,9 +163,6 @@ npm run dev
 
 ## Future Enhancements
 
-- Password Generator
-- Password Strength Meter
-- AES Password Encryption
 - Website URL Support
 - Notes for Credentials
 - Import Credentials
