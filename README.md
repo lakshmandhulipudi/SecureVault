@@ -1,4 +1,4 @@
-# SecureVault - Password Vault & Credential Management System
+ # SecureVault - Password Vault & Credential Management System
 
 SecureVault is a full-stack Password Vault application built using React, Spring Boot, and PostgreSQL. It allows users to securely store, manage, and organize their credentials with OTP-based password recovery, AES encryption, password generation, password strength checking, and secure credential sharing.
 
@@ -123,7 +123,11 @@ SecureVault
 ![Add Credential](./screenshots/AddCredentials.png)
 
 ---
+### Share Credential
 
+![Share Credential](./screenshots/sharedCredential.png)
+
+---
 ### Saved Credentials
 
 ![Credentials](./screenshots/Credentials.png)
@@ -176,4 +180,7 @@ npm run dev
 **Dhulipudi Lakshman**
 
 GitHub:  
-https://github.com/lakshmandhulipudi
+https://github.com/lakshmandhulipudi 
+
+
+
