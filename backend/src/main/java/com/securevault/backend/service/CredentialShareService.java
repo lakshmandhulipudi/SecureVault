@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.securevault.backend.entity.Credential;
 import com.securevault.backend.entity.CredentialShare;
+import com.securevault.backend.entity.Permission;
 import com.securevault.backend.entity.User;
 import com.securevault.backend.repository.CredentialRepository;
 import com.securevault.backend.repository.CredentialShareRepository;
@@ -13,45 +14,54 @@ import com.securevault.backend.repository.UserRepository;
 public class CredentialShareService {
 
     private final CredentialRepository credentialRepository;
-    private final UserRepository userRepository;
     private final CredentialShareRepository credentialShareRepository;
+    private final UserRepository userRepository;
 
     public CredentialShareService(
             CredentialRepository credentialRepository,
-            UserRepository userRepository,
-            CredentialShareRepository credentialShareRepository) {
+            CredentialShareRepository credentialShareRepository,
+            UserRepository userRepository) {
 
         this.credentialRepository = credentialRepository;
-        this.userRepository = userRepository;
         this.credentialShareRepository = credentialShareRepository;
+        this.userRepository = userRepository;
     }
 
     public void shareCredential(
             Long credentialId,
             String ownerEmail,
-            Long recipientUserId) {
+            String recipientEmail,
+            Permission permission) {
 
+        // Find owner
         User owner = userRepository.findByEmail(ownerEmail)
                 .orElseThrow(() ->
-                        new RuntimeException("Owner user not found"));
+                        new RuntimeException("Owner not found"));
 
-        Credential credential = credentialRepository.findById(credentialId)
-                .orElseThrow(() ->
-                        new RuntimeException("Credential not found"));
+        // Find credential
+        Credential credential =
+                credentialRepository.findById(credentialId)
+                        .orElseThrow(() ->
+                                new RuntimeException("Credential not found"));
 
-        // Make sure the credential belongs to the logged-in user
-        if (!credential.getUser().getId().equals(owner.getId())) {
+        // Verify credential belongs to owner
+        if (!credential.getUser().getId()
+                .equals(owner.getId())) {
+
             throw new RuntimeException(
-                    "You can share only your own credentials");
+                    "You are not authorized to share this credential");
         }
 
-        User recipient = userRepository.findById(recipientUserId)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Recipient user is not registered"));
+        // Find recipient using email
+        User recipient =
+                userRepository.findByEmail(recipientEmail)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Recipient email is not registered in SecureVault"));
 
-        // User cannot share with themselves
+        // Prevent sharing with yourself
         if (owner.getId().equals(recipient.getId())) {
+
             throw new RuntimeException(
                     "You cannot share a credential with yourself");
         }
@@ -64,16 +74,23 @@ public class CredentialShareService {
                                 recipient);
 
         if (alreadyShared) {
+
             throw new RuntimeException(
                     "Credential is already shared with this user");
         }
 
-        CredentialShare share = new CredentialShare();
+        // Create share record
+        CredentialShare credentialShare =
+                new CredentialShare();
 
-        share.setCredential(credential);
-        share.setOwner(owner);
-        share.setSharedWithUser(recipient);
+        credentialShare.setCredential(credential);
+        credentialShare.setOwner(owner);
+        credentialShare.setSharedWithUser(recipient);
 
-        credentialShareRepository.save(share);
+        // Assign permission
+        credentialShare.setPermission(permission);
+
+        // Save share record
+        credentialShareRepository.save(credentialShare);
     }
 }

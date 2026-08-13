@@ -1,6 +1,8 @@
 package com.securevault.backend.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,6 +29,9 @@ public class CredentialShare {
     @ManyToOne
     @JoinColumn(name = "shared_with_user_id", nullable = false)
     private User sharedWithUser;
+
+    @Enumerated(EnumType.STRING)
+    private Permission permission;
 
     public CredentialShare() {
     }
@@ -61,5 +66,13 @@ public class CredentialShare {
 
     public void setSharedWithUser(User sharedWithUser) {
         this.sharedWithUser = sharedWithUser;
+    }
+
+    public Permission getPermission() {
+        return permission;
+    }
+
+    public void setPermission(Permission permission) {
+        this.permission = permission;
     }
 }

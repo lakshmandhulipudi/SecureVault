@@ -17,144 +17,103 @@ function Dashboard() {
     }, []);
 
     const loadCredentials = async () => {
+
         try {
-            const response = await api.get(`/credentials?email=${email}`);
+
+            const response = await api.get(
+                `/credentials?email=${email}`
+            );
+
             setCredentials(response.data);
+
         } catch (error) {
+
             console.log(error);
+
         }
+
     };
 
-    const favouriteCount = credentials.filter(c => c.favourite).length;
-    const categoryCount = new Set(credentials.map(c => c.category)).size;
+    const favouriteCount =
+        credentials.filter(c => c.favourite).length;
+
+    const categoryCount =
+        new Set(credentials.map(c => c.category)).size;
 
     return (
+
         <>
             <Navbar />
 
-            <div className="container mt-5">
+            <div
+                className="container py-5"
+                style={{ maxWidth: "1150px" }}
+            >
 
-                <div className="mb-4">
-                    <h2 className="fw-bold">
+                {/* Welcome Section */}
+                <div className="mb-5">
+
+                    <h2 className="fw-bold mb-2">
                         👋 Welcome, {username}
                     </h2>
 
-                    <p className="text-muted">
-                        Manage all your passwords securely from one place.
+                    <p className="text-muted mb-0">
+                        Manage your passwords and credentials securely
+                        from one place.
                     </p>
-                </div>
-
-                <div className="row">
-
-                    <div className="col-md-4 mb-4">
-
-                        <div
-                            className="card text-white shadow-lg"
-                            style={{
-                                background:
-                                    "linear-gradient(135deg,#4F46E5,#6366F1)",
-                                border: "none",
-                                borderRadius: "18px"
-                            }}
-                        >
-
-                            <div className="card-body">
-
-                                <h5>🔑 Total Credentials</h5>
-
-                                <h1 className="display-4 fw-bold">
-                                    {credentials.length}
-                                </h1>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <div className="col-md-4 mb-4">
-
-                        <div
-                            className="card text-white shadow-lg"
-                            style={{
-                                background:
-                                    "linear-gradient(135deg,#16A34A,#22C55E)",
-                                border: "none",
-                                borderRadius: "18px"
-                            }}
-                        >
-
-                            <div className="card-body">
-
-                                <h5>⭐ Favourite</h5>
-
-                                <h1 className="display-4 fw-bold">
-                                    {favouriteCount}
-                                </h1>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <div className="col-md-4 mb-4">
-
-                        <div
-                            className="card text-white shadow-lg"
-                            style={{
-                                background:
-                                    "linear-gradient(135deg,#EA580C,#F97316)",
-                                border: "none",
-                                borderRadius: "18px"
-                            }}
-                        >
-
-                            <div className="card-body">
-
-                                <h5>📂 Categories</h5>
-
-                                <h1 className="display-4 fw-bold">
-                                    {categoryCount}
-                                </h1>
-
-                            </div>
-
-                        </div>
-
-                    </div>
 
                 </div>
 
-                <div className="row mt-3">
 
-                    <div className="col-md-6 mb-4">
+                {/* Statistics */}
+                <div className="row g-4 mb-4">
 
-                        <div className="card shadow border-0 rounded-4">
+                    {/* Total Credentials */}
+                    <div className="col-md-4">
 
-                            <div className="card-body">
+                        <div
+                            className="card h-100 border-0 shadow-sm rounded-4"
+                            style={{
+                                backgroundColor: "#eef4ff"
+                            }}
+                        >
 
-                                <h4 className="mb-4">
-                                    ⚡ Quick Actions
-                                </h4>
+                            <div className="card-body p-4">
 
-                                <button
-                                    className="btn btn-primary me-3"
-                                    onClick={() =>
-                                        navigate("/add-credential")
-                                    }
-                                >
-                                    ➕ Add Credential
-                                </button>
+                                <div className="d-flex justify-content-between align-items-start">
 
-                                <button
-                                    className="btn btn-dark"
-                                    onClick={() =>
-                                        navigate("/credentials")
-                                    }
-                                >
-                                    📋 View Credentials
-                                </button>
+                                    <div>
+
+                                        <p
+                                            className="text-muted mb-2 fw-semibold"
+                                        >
+                                            Total Credentials
+                                        </p>
+
+                                        <h1
+                                            className="fw-bold mb-0"
+                                            style={{
+                                                color: "#2563eb"
+                                            }}
+                                        >
+                                            {credentials.length}
+                                        </h1>
+
+                                    </div>
+
+                                    <div
+                                        className="rounded-circle d-flex align-items-center justify-content-center"
+                                        style={{
+                                            width: "48px",
+                                            height: "48px",
+                                            backgroundColor: "#dbeafe",
+                                            fontSize: "22px"
+                                        }}
+                                    >
+                                        🔑
+                                    </div>
+
+                                </div>
 
                             </div>
 
@@ -162,57 +121,298 @@ function Dashboard() {
 
                     </div>
 
-                    <div className="col-md-6">
 
-                        <div className="card shadow border-0 rounded-4">
+                    {/* Favourite */}
+                    <div className="col-md-4">
 
-                            <div className="card-body">
+                        <div
+                            className="card h-100 border-0 shadow-sm rounded-4"
+                            style={{
+                                backgroundColor: "#f0fdf4"
+                            }}
+                        >
 
-                                <h4 className="mb-4">
-                                    🕒 Recent Credentials
-                                </h4>
+                            <div className="card-body p-4">
 
-                                {
-                                    credentials.length === 0 ? (
+                                <div className="d-flex justify-content-between align-items-start">
 
-                                        <div className="alert alert-secondary">
+                                    <div>
 
-                                            No credentials added.
+                                        <p
+                                            className="text-muted mb-2 fw-semibold"
+                                        >
+                                            Favourite Credentials
+                                        </p>
 
+                                        <h1
+                                            className="fw-bold mb-0"
+                                            style={{
+                                                color: "#16a34a"
+                                            }}
+                                        >
+                                            {favouriteCount}
+                                        </h1>
+
+                                    </div>
+
+                                    <div
+                                        className="rounded-circle d-flex align-items-center justify-content-center"
+                                        style={{
+                                            width: "48px",
+                                            height: "48px",
+                                            backgroundColor: "#dcfce7",
+                                            fontSize: "22px"
+                                        }}
+                                    >
+                                        ⭐
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    {/* Categories */}
+                    <div className="col-md-4">
+
+                        <div
+                            className="card h-100 border-0 shadow-sm rounded-4"
+                            style={{
+                                backgroundColor: "#fff7ed"
+                            }}
+                        >
+
+                            <div className="card-body p-4">
+
+                                <div className="d-flex justify-content-between align-items-start">
+
+                                    <div>
+
+                                        <p
+                                            className="text-muted mb-2 fw-semibold"
+                                        >
+                                            Categories
+                                        </p>
+
+                                        <h1
+                                            className="fw-bold mb-0"
+                                            style={{
+                                                color: "#ea580c"
+                                            }}
+                                        >
+                                            {categoryCount}
+                                        </h1>
+
+                                    </div>
+
+                                    <div
+                                        className="rounded-circle d-flex align-items-center justify-content-center"
+                                        style={{
+                                            width: "48px",
+                                            height: "48px",
+                                            backgroundColor: "#ffedd5",
+                                            fontSize: "22px"
+                                        }}
+                                    >
+                                        📂
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                {/* Bottom Section */}
+                <div className="row g-4">
+
+                    {/* Quick Actions */}
+                    <div className="col-lg-5">
+
+                        <div
+                            className="card h-100 border-0 shadow-sm rounded-4"
+                        >
+
+                            <div className="card-body p-4">
+
+                                <div className="mb-4">
+
+                                    <h4 className="fw-bold mb-1">
+                                        ⚡ Quick Actions
+                                    </h4>
+
+                                    <p className="text-muted small mb-0">
+                                        Quickly access your credentials.
+                                    </p>
+
+                                </div>
+
+
+                                <div className="d-grid gap-3">
+
+                                    <button
+                                        type="button"
+                                        className="btn btn-outline-primary text-start py-2"
+                                        onClick={() =>
+                                            navigate("/add-credential")
+                                        }
+                                    >
+                                        ➕ &nbsp; Add Credential
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        className="btn btn-outline-secondary text-start py-2"
+                                        onClick={() =>
+                                            navigate("/credentials")
+                                        }
+                                    >
+                                        📋 &nbsp; View All Credentials
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    {/* Recent Credentials */}
+                    <div className="col-lg-7">
+
+                        <div
+                            className="card border-0 shadow-sm rounded-4"
+                        >
+
+                            <div className="card-body p-4">
+
+                                <div className="d-flex justify-content-between align-items-center mb-4">
+
+                                    <div>
+
+                                        <h4 className="fw-bold mb-1">
+                                            🕒 Recent Credentials
+                                        </h4>
+
+                                        <p className="text-muted small mb-0">
+                                            Your recently added credentials.
+                                        </p>
+
+                                    </div>
+
+                                    {credentials.length > 0 && (
+
+                                        <button
+                                            type="button"
+                                            className="btn btn-sm btn-outline-primary"
+                                            onClick={() =>
+                                                navigate("/credentials")
+                                            }
+                                        >
+                                            View All
+                                        </button>
+
+                                    )}
+
+                                </div>
+
+
+                                {credentials.length === 0 ? (
+
+                                    <div
+                                        className="text-center py-5 rounded-3"
+                                        style={{
+                                            backgroundColor: "#f8fafc"
+                                        }}
+                                    >
+
+                                        <div
+                                            style={{
+                                                fontSize: "40px"
+                                            }}
+                                        >
+                                            🔐
                                         </div>
 
-                                    ) : (
+                                        <h6 className="fw-semibold mt-3">
+                                            No credentials yet
+                                        </h6>
 
-                                        credentials
-                                            .slice(-5)
-                                            .reverse()
-                                            .map(c => (
+                                        <p className="text-muted small mb-3">
+                                            Add your first credential to
+                                            get started.
+                                        </p>
 
-                                                <div
-                                                    key={c.id}
-                                                    className="border rounded p-3 mb-3"
-                                                >
+                                        <button
+                                            type="button"
+                                            className="btn btn-outline-primary btn-sm"
+                                            onClick={() =>
+                                                navigate("/add-credential")
+                                            }
+                                        >
+                                            ➕ Add Credential
+                                        </button>
 
-                                                    <h5>
-                                                        🌐 {c.website}
-                                                    </h5>
+                                    </div>
 
-                                                    <small className="text-muted">
-                                                        👤 {c.username}
-                                                    </small>
+                                ) : (
 
-                                                    <br />
+                                    credentials
+                                        .slice(-5)
+                                        .reverse()
+                                        .map(c => (
 
-                                                    <span className="badge bg-primary mt-2">
+                                            <div
+                                                key={c.id}
+                                                className="border rounded-3 p-3 mb-3"
+                                                style={{
+                                                    backgroundColor: "#ffffff"
+                                                }}
+                                            >
+
+                                                <div className="d-flex justify-content-between align-items-center">
+
+                                                    <div>
+
+                                                        <h6 className="fw-bold mb-1">
+                                                            🌐 {c.website}
+                                                        </h6>
+
+                                                        <small className="text-muted">
+                                                            👤 {c.username}
+                                                        </small>
+
+                                                    </div>
+
+                                                    <span
+                                                        className="badge rounded-pill"
+                                                        style={{
+                                                            backgroundColor: "#eff6ff",
+                                                            color: "#2563eb",
+                                                            fontWeight: "500"
+                                                        }}
+                                                    >
                                                         {c.category}
                                                     </span>
 
                                                 </div>
 
-                                            ))
+                                            </div>
 
-                                    )
-                                }
+                                        ))
+
+                                )}
 
                             </div>
 

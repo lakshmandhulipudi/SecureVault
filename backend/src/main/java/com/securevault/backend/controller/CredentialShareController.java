@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.securevault.backend.entity.Permission;
 import com.securevault.backend.service.CredentialShareService;
 
 @RestController
@@ -25,27 +26,24 @@ public class CredentialShareController {
 
     @PostMapping("/{credentialId}/share")
     public ResponseEntity<String> shareCredential(
+
             @PathVariable Long credentialId,
+
             @RequestParam String ownerEmail,
-            @RequestParam Long recipientUserId) {
 
-        try {
+            @RequestParam String recipientEmail,
 
-            credentialShareService.shareCredential(
-                    credentialId,
-                    ownerEmail,
-                    recipientUserId
-            );
+            @RequestParam Permission permission) {
 
-            return ResponseEntity.ok(
-                    "Credential shared successfully"
-            );
+        credentialShareService.shareCredential(
+                credentialId,
+                ownerEmail,
+                recipientEmail,
+                permission
+        );
 
-        } catch (RuntimeException e) {
-
-            return ResponseEntity
-                    .badRequest()
-                    .body(e.getMessage());
-        }
+        return ResponseEntity.ok(
+                "Credential shared successfully"
+        );
     }
 }

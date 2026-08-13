@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.securevault.backend.dto.CredentialRequest;
+import com.securevault.backend.dto.CredentialResponse;
 import com.securevault.backend.entity.Credential;
 import com.securevault.backend.service.CredentialService;
 
@@ -47,7 +48,7 @@ public class CredentialController {
 
     // Get Own + Shared Credentials
     @GetMapping
-    public ResponseEntity<List<Credential>> getCredentials(
+    public ResponseEntity<List<CredentialResponse>> getCredentials(
             @RequestParam String email) {
 
         return ResponseEntity.ok(
@@ -55,23 +56,21 @@ public class CredentialController {
         );
     }
 
-    // Share Credential
-    @PostMapping("/{id}/share")
-    public ResponseEntity<String> shareCredential(
+    // Delete Credential
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteCredential(
             @PathVariable Long id,
-            @RequestParam String ownerEmail,
-            @RequestParam Long recipientUserId) {
+            @RequestParam String email) {
 
         try {
 
-            credentialService.shareCredential(
+            credentialService.deleteCredential(
                     id,
-                    ownerEmail,
-                    recipientUserId
+                    email
             );
 
             return ResponseEntity.ok(
-                    "Credential shared successfully"
+                    "Credential Deleted Successfully"
             );
 
         } catch (RuntimeException e) {
@@ -82,29 +81,28 @@ public class CredentialController {
         }
     }
 
-    // Delete Credential
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCredential(
-            @PathVariable Long id) {
-
-        credentialService.deleteCredential(id);
-
-        return ResponseEntity.ok(
-                "Credential Deleted Successfully"
-        );
-    }
-
     // Update Credential
     @PutMapping("/{id}")
-    public ResponseEntity<Credential> updateCredential(
+    public ResponseEntity<?> updateCredential(
             @PathVariable Long id,
+            @RequestParam String email,
             @RequestBody CredentialRequest request) {
 
-        return ResponseEntity.ok(
-                credentialService.updateCredential(
-                        id,
-                        request
-                )
-        );
+        try {
+
+            return ResponseEntity.ok(
+                    credentialService.updateCredential(
+                            id,
+                            email,
+                            request
+                    )
+            );
+
+        } catch (RuntimeException e) {
+
+            return ResponseEntity
+                    .badRequest()
+                    .body(e.getMessage());
+        }
     }
 }

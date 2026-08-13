@@ -16,10 +16,9 @@ function Navbar() {
     return (
 
         <nav
-            className="navbar navbar-expand-lg navbar-dark"
+            className="navbar navbar-expand-lg bg-white border-bottom shadow-sm"
             style={{
-                backgroundColor: "#0f172a",
-                padding: "15px 30px"
+                padding: "12px 30px"
             }}
         >
 
@@ -27,25 +26,33 @@ function Navbar() {
 
                 {/* Logo */}
                 <Link
-                    className="navbar-brand fw-bold fs-3"
+                    className="navbar-brand fw-bold fs-3 text-primary"
                     to="/dashboard"
+                    style={{
+                        letterSpacing: "0.3px"
+                    }}
                 >
-                    🔐 Password Vault
+                    🔐 SecureVault
                 </Link>
 
                 {/* Home Button */}
                 <button
-                    className="btn btn-outline-light ms-3"
+                    type="button"
+                    className="btn btn-outline-primary btn-sm ms-3 px-3"
                     onClick={() => navigate("/dashboard")}
                 >
                     🏠 Home
                 </button>
 
+                {/* Mobile Toggle */}
                 <button
                     className="navbar-toggler"
                     type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#navbarNav"
+                    aria-controls="navbarNav"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
                 >
                     <span className="navbar-toggler-icon"></span>
                 </button>
@@ -55,12 +62,13 @@ function Navbar() {
                     id="navbarNav"
                 >
 
-                    <ul className="navbar-nav ms-auto align-items-center">
+                    <ul className="navbar-nav ms-auto align-items-lg-center">
 
-                        <li className="nav-item me-3">
+                        {/* Dashboard */}
+                        <li className="nav-item me-lg-3">
 
                             <Link
-                                className="nav-link text-white"
+                                className="nav-link fw-semibold text-secondary"
                                 to="/dashboard"
                             >
                                 Dashboard
@@ -68,45 +76,52 @@ function Navbar() {
 
                         </li>
 
-                        <li className="nav-item dropdown me-3">
+                        {/* Credentials Dropdown */}
+                        <li className="nav-item dropdown me-lg-3">
 
                             <a
-                                className="nav-link dropdown-toggle text-white"
+                                className="nav-link dropdown-toggle fw-semibold text-secondary"
                                 href="#"
                                 role="button"
                                 data-bs-toggle="dropdown"
+                                aria-expanded="false"
                             >
                                 Credentials
                             </a>
 
-                            <ul className="dropdown-menu">
+                            <ul className="dropdown-menu shadow-sm border-0">
 
                                 <li>
+
                                     <Link
                                         className="dropdown-item"
                                         to="/add-credential"
                                     >
                                         ➕ Add Credential
                                     </Link>
+
                                 </li>
 
                                 <li>
+
                                     <Link
                                         className="dropdown-item"
                                         to="/credentials"
                                     >
                                         📋 View Credentials
                                     </Link>
+
                                 </li>
 
                             </ul>
 
                         </li>
 
-                        <li className="nav-item me-4">
+                        {/* Profile */}
+                        <li className="nav-item me-lg-3">
 
                             <Link
-                                className="nav-link text-white"
+                                className="nav-link fw-semibold text-secondary"
                                 to="/profile"
                             >
                                 👤 Profile
@@ -114,10 +129,12 @@ function Navbar() {
 
                         </li>
 
-                        <li className="nav-item">
+                        {/* Logout */}
+                        <li className="nav-item mt-2 mt-lg-0">
 
                             <button
-                                className="btn btn-danger px-4"
+                                type="button"
+                                className="btn btn-outline-danger btn-sm px-4"
                                 onClick={handleLogout}
                             >
                                 Logout
@@ -134,7 +151,6 @@ function Navbar() {
         </nav>
 
     );
-
 }
 
 export default Navbar;

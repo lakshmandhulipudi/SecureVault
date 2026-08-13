@@ -6,7 +6,6 @@ import api from "../services/api";
 function UpdateCredential() {
 
     const { id } = useParams();
-
     const navigate = useNavigate();
 
     const email = localStorage.getItem("email");
@@ -28,7 +27,7 @@ function UpdateCredential() {
         try {
 
             const response = await api.get(
-                `/credentials?email=${email}`
+                `/credentials?email=${encodeURIComponent(email)}`
             );
 
             const selected = response.data.find(
@@ -37,11 +36,16 @@ function UpdateCredential() {
 
             if (selected) {
                 setCredential(selected);
+            } else {
+                alert("Credential not found or you do not have access");
+                navigate("/credentials");
             }
 
         } catch (error) {
 
             console.log(error);
+
+            alert("Failed to load credential");
 
         }
 
@@ -52,13 +56,10 @@ function UpdateCredential() {
         const { name, value, type, checked } = e.target;
 
         setCredential({
-
             ...credential,
-
             [name]: type === "checkbox"
                 ? checked
                 : value
-
         });
 
     };
@@ -69,12 +70,15 @@ function UpdateCredential() {
 
         try {
 
+            /*
+             * Backend requires the user's email as a request parameter.
+             *
+             * PUT:
+             * /api/credentials/{id}?email={email}
+             */
             await api.put(
-
-                `/credentials/${id}`,
-
+                `/credentials/${id}?email=${encodeURIComponent(email)}`,
                 credential
-
             );
 
             alert("Credential Updated Successfully");
@@ -83,18 +87,27 @@ function UpdateCredential() {
 
         } catch (error) {
 
-            console.log(error);
+            console.log("Update Error:", error);
 
-            alert("Update Failed");
+            if (error.response) {
+
+                alert(
+                    error.response.data ||
+                    "You do not have permission to update this credential"
+                );
+
+            } else {
+
+                alert("Update Failed");
+
+            }
 
         }
 
     };
 
     return (
-
         <>
-
             <Navbar />
 
             <div className="container mt-4">
@@ -117,13 +130,12 @@ function UpdateCredential() {
                         <div className="card shadow-lg p-4 rounded-4">
 
                             <h2 className="mb-4">
-
                                 Update Credential
-
                             </h2>
 
                             <form onSubmit={handleUpdate}>
 
+                                {/* Website */}
                                 <div className="mb-3">
 
                                     <input
@@ -132,11 +144,13 @@ function UpdateCredential() {
                                         value={credential.website}
                                         onChange={handleChange}
                                         placeholder="Website"
+                                        autoComplete="url"
                                         required
                                     />
 
                                 </div>
 
+                                {/* Username */}
                                 <div className="mb-3">
 
                                     <input
@@ -145,24 +159,29 @@ function UpdateCredential() {
                                         value={credential.username}
                                         onChange={handleChange}
                                         placeholder="Username"
+                                        autoComplete="username"
                                         required
                                     />
 
                                 </div>
 
+                                {/* Password */}
                                 <div className="mb-3">
 
                                     <input
                                         className="form-control"
+                                        type="text"
                                         name="password"
                                         value={credential.password}
                                         onChange={handleChange}
                                         placeholder="Password"
+                                        autoComplete="new-password"
                                         required
                                     />
 
                                 </div>
 
+                                {/* Category */}
                                 <div className="mb-3">
 
                                     <select
@@ -172,43 +191,65 @@ function UpdateCredential() {
                                         onChange={handleChange}
                                     >
 
-                                        <option>Social</option>
-                                        <option>Banking</option>
-                                        <option>Work</option>
-                                        <option>Shopping</option>
-                                        <option>Education</option>
-                                        <option>Entertainment</option>
-                                        <option>Other</option>
+                                        <option value="Social">
+                                            Social
+                                        </option>
+
+                                        <option value="Banking">
+                                            Banking
+                                        </option>
+
+                                        <option value="Work">
+                                            Work
+                                        </option>
+
+                                        <option value="Shopping">
+                                            Shopping
+                                        </option>
+
+                                        <option value="Education">
+                                            Education
+                                        </option>
+
+                                        <option value="Entertainment">
+                                            Entertainment
+                                        </option>
+
+                                        <option value="Other">
+                                            Other
+                                        </option>
 
                                     </select>
 
                                 </div>
 
+                                {/* Favourite */}
                                 <div className="form-check mb-4">
 
                                     <input
                                         type="checkbox"
                                         className="form-check-input"
+                                        id="favourite"
                                         name="favourite"
                                         checked={credential.favourite}
                                         onChange={handleChange}
                                     />
 
-                                    <label className="form-check-label">
-
+                                    <label
+                                        className="form-check-label"
+                                        htmlFor="favourite"
+                                    >
                                         ⭐ Favourite
-
                                     </label>
 
                                 </div>
 
+                                {/* Update button */}
                                 <button
                                     className="btn btn-dark"
                                     type="submit"
                                 >
-
                                     Update Credential
-
                                 </button>
 
                             </form>
@@ -220,11 +261,8 @@ function UpdateCredential() {
                 </div>
 
             </div>
-
         </>
-
     );
-
 }
 
 export default UpdateCredential;
