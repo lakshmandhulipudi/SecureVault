@@ -251,7 +251,8 @@ function Dashboard() {
                                     </h4>
 
                                     <p className="text-muted small mb-0">
-                                        Quickly access your credentials.
+                                        Quickly access your credentials
+                                        and security activity.
                                     </p>
 
                                 </div>
@@ -259,6 +260,7 @@ function Dashboard() {
 
                                 <div className="d-grid gap-3">
 
+                                    {/* Add Credential */}
                                     <button
                                         type="button"
                                         className="btn btn-outline-primary text-start py-2"
@@ -269,6 +271,8 @@ function Dashboard() {
                                         ➕ &nbsp; Add Credential
                                     </button>
 
+
+                                    {/* View Credentials */}
                                     <button
                                         type="button"
                                         className="btn btn-outline-secondary text-start py-2"
@@ -278,6 +282,44 @@ function Dashboard() {
                                     >
                                         📋 &nbsp; View All Credentials
                                     </button>
+
+
+                                    {/* Security Dropdown */}
+                                    <div>
+
+                                        <label
+                                            className="form-label fw-semibold mb-2"
+                                        >
+                                            🔐 Security
+                                        </label>
+
+                                        <select
+                                            className="form-select"
+                                            defaultValue=""
+                                            onChange={(e) => {
+
+                                                if (e.target.value === "login-activities") {
+
+                                                    navigate(
+                                                        "/login-activities"
+                                                    );
+
+                                                }
+
+                                            }}
+                                        >
+
+                                            <option value="" disabled>
+                                                Select Security Option
+                                            </option>
+
+                                            <option value="login-activities">
+                                                🔐 Login Activities
+                                            </option>
+
+                                        </select>
+
+                                    </div>
 
                                 </div>
 

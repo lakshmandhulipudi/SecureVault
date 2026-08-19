@@ -13,6 +13,7 @@ import AddCredential from "./pages/AddCredential";
 import Credentials from "./pages/Credentials";
 import UpdateCredential from "./pages/UpdateCredential";
 import Profile from "./pages/Profile";
+import LoginActivities from "./pages/LoginActivities";
 
 function App() {
 
@@ -83,6 +84,17 @@ function App() {
           element={
             <ProtectedRoute>
               <Profile />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Login Activities */}
+
+        <Route
+          path="/login-activities"
+          element={
+            <ProtectedRoute>
+              <LoginActivities />
             </ProtectedRoute>
           }
         />
