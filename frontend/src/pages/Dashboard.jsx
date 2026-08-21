@@ -40,6 +40,28 @@ function Dashboard() {
     const categoryCount =
         new Set(credentials.map(c => c.category)).size;
 
+    const handleSecurityChange = (e) => {
+
+        const value = e.target.value;
+
+        if (value === "login-activities") {
+            navigate("/login-activities");
+        }
+
+        if (value === "suspicious-activity") {
+            navigate("/suspicious-activity");
+        }
+
+        if (value === "security-alerts") {
+            navigate("/security-alerts");
+        }
+
+        if (value === "audit-logs") {
+            navigate("/audit-logs");
+        }
+
+    };
+
     return (
 
         <>
@@ -50,11 +72,11 @@ function Dashboard() {
                 style={{ maxWidth: "1150px" }}
             >
 
-                {/* Welcome Section */}
+                {/* Welcome */}
                 <div className="mb-5">
 
                     <h2 className="fw-bold mb-2">
-                        👋 Welcome, {username}
+                        Welcome, {username}
                     </h2>
 
                     <p className="text-muted mb-0">
@@ -80,40 +102,18 @@ function Dashboard() {
 
                             <div className="card-body p-4">
 
-                                <div className="d-flex justify-content-between align-items-start">
+                                <p className="text-muted mb-2 fw-semibold">
+                                    Total Credentials
+                                </p>
 
-                                    <div>
-
-                                        <p
-                                            className="text-muted mb-2 fw-semibold"
-                                        >
-                                            Total Credentials
-                                        </p>
-
-                                        <h1
-                                            className="fw-bold mb-0"
-                                            style={{
-                                                color: "#2563eb"
-                                            }}
-                                        >
-                                            {credentials.length}
-                                        </h1>
-
-                                    </div>
-
-                                    <div
-                                        className="rounded-circle d-flex align-items-center justify-content-center"
-                                        style={{
-                                            width: "48px",
-                                            height: "48px",
-                                            backgroundColor: "#dbeafe",
-                                            fontSize: "22px"
-                                        }}
-                                    >
-                                        🔑
-                                    </div>
-
-                                </div>
+                                <h1
+                                    className="fw-bold mb-0"
+                                    style={{
+                                        color: "#2563eb"
+                                    }}
+                                >
+                                    {credentials.length}
+                                </h1>
 
                             </div>
 
@@ -134,40 +134,18 @@ function Dashboard() {
 
                             <div className="card-body p-4">
 
-                                <div className="d-flex justify-content-between align-items-start">
+                                <p className="text-muted mb-2 fw-semibold">
+                                    Favourite Credentials
+                                </p>
 
-                                    <div>
-
-                                        <p
-                                            className="text-muted mb-2 fw-semibold"
-                                        >
-                                            Favourite Credentials
-                                        </p>
-
-                                        <h1
-                                            className="fw-bold mb-0"
-                                            style={{
-                                                color: "#16a34a"
-                                            }}
-                                        >
-                                            {favouriteCount}
-                                        </h1>
-
-                                    </div>
-
-                                    <div
-                                        className="rounded-circle d-flex align-items-center justify-content-center"
-                                        style={{
-                                            width: "48px",
-                                            height: "48px",
-                                            backgroundColor: "#dcfce7",
-                                            fontSize: "22px"
-                                        }}
-                                    >
-                                        ⭐
-                                    </div>
-
-                                </div>
+                                <h1
+                                    className="fw-bold mb-0"
+                                    style={{
+                                        color: "#16a34a"
+                                    }}
+                                >
+                                    {favouriteCount}
+                                </h1>
 
                             </div>
 
@@ -188,40 +166,18 @@ function Dashboard() {
 
                             <div className="card-body p-4">
 
-                                <div className="d-flex justify-content-between align-items-start">
+                                <p className="text-muted mb-2 fw-semibold">
+                                    Categories
+                                </p>
 
-                                    <div>
-
-                                        <p
-                                            className="text-muted mb-2 fw-semibold"
-                                        >
-                                            Categories
-                                        </p>
-
-                                        <h1
-                                            className="fw-bold mb-0"
-                                            style={{
-                                                color: "#ea580c"
-                                            }}
-                                        >
-                                            {categoryCount}
-                                        </h1>
-
-                                    </div>
-
-                                    <div
-                                        className="rounded-circle d-flex align-items-center justify-content-center"
-                                        style={{
-                                            width: "48px",
-                                            height: "48px",
-                                            backgroundColor: "#ffedd5",
-                                            fontSize: "22px"
-                                        }}
-                                    >
-                                        📂
-                                    </div>
-
-                                </div>
+                                <h1
+                                    className="fw-bold mb-0"
+                                    style={{
+                                        color: "#ea580c"
+                                    }}
+                                >
+                                    {categoryCount}
+                                </h1>
 
                             </div>
 
@@ -238,21 +194,19 @@ function Dashboard() {
                     {/* Quick Actions */}
                     <div className="col-lg-5">
 
-                        <div
-                            className="card h-100 border-0 shadow-sm rounded-4"
-                        >
+                        <div className="card h-100 border-0 shadow-sm rounded-4">
 
                             <div className="card-body p-4">
 
                                 <div className="mb-4">
 
                                     <h4 className="fw-bold mb-1">
-                                        ⚡ Quick Actions
+                                        Quick Actions
                                     </h4>
 
                                     <p className="text-muted small mb-0">
-                                        Quickly access your credentials
-                                        and security activity.
+                                        Access your credentials and security
+                                        information.
                                     </p>
 
                                 </div>
@@ -260,7 +214,6 @@ function Dashboard() {
 
                                 <div className="d-grid gap-3">
 
-                                    {/* Add Credential */}
                                     <button
                                         type="button"
                                         className="btn btn-outline-primary text-start py-2"
@@ -268,11 +221,10 @@ function Dashboard() {
                                             navigate("/add-credential")
                                         }
                                     >
-                                        ➕ &nbsp; Add Credential
+                                        Add Credential
                                     </button>
 
 
-                                    {/* View Credentials */}
                                     <button
                                         type="button"
                                         className="btn btn-outline-secondary text-start py-2"
@@ -280,41 +232,41 @@ function Dashboard() {
                                             navigate("/credentials")
                                         }
                                     >
-                                        📋 &nbsp; View All Credentials
+                                        View All Credentials
                                     </button>
 
 
-                                    {/* Security Dropdown */}
-                                    <div>
+                                    {/* Security */}
+                                    <div className="mt-2">
 
-                                        <label
-                                            className="form-label fw-semibold mb-2"
-                                        >
-                                            🔐 Security
+                                        <label className="form-label fw-semibold mb-2">
+                                            Security
                                         </label>
 
                                         <select
                                             className="form-select"
                                             defaultValue=""
-                                            onChange={(e) => {
-
-                                                if (e.target.value === "login-activities") {
-
-                                                    navigate(
-                                                        "/login-activities"
-                                                    );
-
-                                                }
-
-                                            }}
+                                            onChange={handleSecurityChange}
                                         >
 
                                             <option value="" disabled>
-                                                Select Security Option
+                                                Select security activity
                                             </option>
 
                                             <option value="login-activities">
-                                                🔐 Login Activities
+                                                Login Activities
+                                            </option>
+
+                                            <option value="suspicious-activity">
+                                                Suspicious Activity
+                                            </option>
+
+                                            <option value="security-alerts">
+                                                Security Alerts
+                                            </option>
+
+                                            <option value="audit-logs">
+                                                Audit Logs
                                             </option>
 
                                         </select>
@@ -333,9 +285,7 @@ function Dashboard() {
                     {/* Recent Credentials */}
                     <div className="col-lg-7">
 
-                        <div
-                            className="card border-0 shadow-sm rounded-4"
-                        >
+                        <div className="card border-0 shadow-sm rounded-4">
 
                             <div className="card-body p-4">
 
@@ -344,7 +294,7 @@ function Dashboard() {
                                     <div>
 
                                         <h4 className="fw-bold mb-1">
-                                            🕒 Recent Credentials
+                                            Recent Credentials
                                         </h4>
 
                                         <p className="text-muted small mb-0">
@@ -379,15 +329,7 @@ function Dashboard() {
                                         }}
                                     >
 
-                                        <div
-                                            style={{
-                                                fontSize: "40px"
-                                            }}
-                                        >
-                                            🔐
-                                        </div>
-
-                                        <h6 className="fw-semibold mt-3">
+                                        <h6 className="fw-semibold">
                                             No credentials yet
                                         </h6>
 
@@ -403,7 +345,7 @@ function Dashboard() {
                                                 navigate("/add-credential")
                                             }
                                         >
-                                            ➕ Add Credential
+                                            Add Credential
                                         </button>
 
                                     </div>
@@ -428,11 +370,11 @@ function Dashboard() {
                                                     <div>
 
                                                         <h6 className="fw-bold mb-1">
-                                                            🌐 {c.website}
+                                                            {c.website}
                                                         </h6>
 
                                                         <small className="text-muted">
-                                                            👤 {c.username}
+                                                            {c.username}
                                                         </small>
 
                                                     </div>

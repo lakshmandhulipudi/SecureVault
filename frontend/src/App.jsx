@@ -13,97 +13,145 @@ import AddCredential from "./pages/AddCredential";
 import Credentials from "./pages/Credentials";
 import UpdateCredential from "./pages/UpdateCredential";
 import Profile from "./pages/Profile";
+
 import LoginActivities from "./pages/LoginActivities";
+import SuspiciousActivity from "./pages/SuspiciousActivity";
+import SecurityAlerts from "./pages/SecurityAlerts";
+import AuditLogs from "./pages/AuditLogs";
 
 function App() {
 
-  return (
+    return (
 
-    <BrowserRouter>
+        <BrowserRouter>
 
-      <Routes>
+            <Routes>
 
-        {/* Authentication */}
+                {/* Authentication */}
 
-        <Route path="/" element={<Login />} />
+                <Route
+                    path="/"
+                    element={<Login />}
+                />
 
-        <Route path="/register" element={<Register />} />
+                <Route
+                    path="/register"
+                    element={<Register />}
+                />
 
-        {/* Forgot Password */}
+                <Route
+                    path="/forgot-password"
+                    element={<ForgotPassword />}
+                />
 
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route
+                    path="/verify-otp"
+                    element={<VerifyOtp />}
+                />
 
-        <Route path="/verify-otp" element={<VerifyOtp />} />
+                <Route
+                    path="/reset-password"
+                    element={<ResetPassword />}
+                />
 
-        <Route path="/reset-password" element={<ResetPassword />} />
 
-        {/* Dashboard */}
+                {/* Dashboard */}
 
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+                <Route
+                    path="/dashboard"
+                    element={
+                        <ProtectedRoute>
+                            <Dashboard />
+                        </ProtectedRoute>
+                    }
+                />
 
-        {/* Credentials */}
 
-        <Route
-          path="/add-credential"
-          element={
-            <ProtectedRoute>
-              <AddCredential />
-            </ProtectedRoute>
-          }
-        />
+                {/* Credentials */}
 
-        <Route
-          path="/credentials"
-          element={
-            <ProtectedRoute>
-              <Credentials />
-            </ProtectedRoute>
-          }
-        />
+                <Route
+                    path="/add-credential"
+                    element={
+                        <ProtectedRoute>
+                            <AddCredential />
+                        </ProtectedRoute>
+                    }
+                />
 
-        <Route
-          path="/update-credential/:id"
-          element={
-            <ProtectedRoute>
-              <UpdateCredential />
-            </ProtectedRoute>
-          }
-        />
+                <Route
+                    path="/credentials"
+                    element={
+                        <ProtectedRoute>
+                            <Credentials />
+                        </ProtectedRoute>
+                    }
+                />
 
-        {/* Profile */}
+                <Route
+                    path="/update-credential/:id"
+                    element={
+                        <ProtectedRoute>
+                            <UpdateCredential />
+                        </ProtectedRoute>
+                    }
+                />
 
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
 
-        {/* Login Activities */}
+                {/* Profile */}
 
-        <Route
-          path="/login-activities"
-          element={
-            <ProtectedRoute>
-              <LoginActivities />
-            </ProtectedRoute>
-          }
-        />
+                <Route
+                    path="/profile"
+                    element={
+                        <ProtectedRoute>
+                            <Profile />
+                        </ProtectedRoute>
+                    }
+                />
 
-      </Routes>
 
-    </BrowserRouter>
+                {/* Security */}
 
-  );
+                <Route
+                    path="/login-activities"
+                    element={
+                        <ProtectedRoute>
+                            <LoginActivities />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/suspicious-activity"
+                    element={
+                        <ProtectedRoute>
+                            <SuspiciousActivity />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/security-alerts"
+                    element={
+                        <ProtectedRoute>
+                            <SecurityAlerts />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/audit-logs"
+                    element={
+                        <ProtectedRoute>
+                            <AuditLogs />
+                        </ProtectedRoute>
+                    }
+                />
+
+            </Routes>
+
+        </BrowserRouter>
+
+    );
 
 }
 

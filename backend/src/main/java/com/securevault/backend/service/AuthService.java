@@ -24,17 +24,20 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final OtpRepository otpRepository;
     private final LoginActivityRepository loginActivityRepository;
+    private final SuspiciousActivityService suspiciousActivityService;
 
     public AuthService(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
             OtpRepository otpRepository,
-            LoginActivityRepository loginActivityRepository) {
+            LoginActivityRepository loginActivityRepository,
+            SuspiciousActivityService suspiciousActivityService) {
 
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.otpRepository = otpRepository;
         this.loginActivityRepository = loginActivityRepository;
+        this.suspiciousActivityService = suspiciousActivityService;
     }
 
     // Register User
@@ -84,6 +87,9 @@ public class AuthService {
                     LoginStatus.FAILED
             );
 
+            // Cannot analyze using user-specific
+            // suspicious activity because user does not exist.
+
             throw new RuntimeException(
                     "Invalid email"
             );
@@ -94,10 +100,16 @@ public class AuthService {
                 request.getPassword(),
                 user.getPassword())) {
 
+            // Step 1: Save failed login
             saveLoginActivity(
                     user,
                     user.getEmail(),
                     LoginStatus.FAILED
+            );
+
+            // Step 2: Analyze recent login activity
+            suspiciousActivityService.analyzeActivity(
+                    user.getEmail()
             );
 
             throw new RuntimeException(
@@ -110,6 +122,13 @@ public class AuthService {
                 user,
                 user.getEmail(),
                 LoginStatus.SUCCESS
+        );
+
+        // Analyze recent activity after successful login
+        // This also allows the system to detect previous
+        // repeated failed attempts.
+        suspiciousActivityService.analyzeActivity(
+                user.getEmail()
         );
 
         return new LoginResponse(

@@ -18,7 +18,7 @@ function Navbar() {
         <nav
             className="navbar navbar-expand-lg bg-white border-bottom shadow-sm"
             style={{
-                padding: "12px 30px"
+                padding: "14px 30px"
             }}
         >
 
@@ -32,17 +32,8 @@ function Navbar() {
                         letterSpacing: "0.3px"
                     }}
                 >
-                    🔐 SecureVault
+                    SecureVault
                 </Link>
-
-                {/* Home Button */}
-                <button
-                    type="button"
-                    className="btn btn-outline-primary btn-sm ms-3 px-3"
-                    onClick={() => navigate("/dashboard")}
-                >
-                    🏠 Home
-                </button>
 
                 {/* Mobile Toggle */}
                 <button
@@ -76,7 +67,7 @@ function Navbar() {
 
                         </li>
 
-                        {/* Credentials Dropdown */}
+                        {/* Credentials */}
                         <li className="nav-item dropdown me-lg-3">
 
                             <a
@@ -89,28 +80,24 @@ function Navbar() {
                                 Credentials
                             </a>
 
-                            <ul className="dropdown-menu shadow-sm border-0">
+                            <ul className="dropdown-menu dropdown-menu-end shadow-sm">
 
                                 <li>
-
                                     <Link
                                         className="dropdown-item"
                                         to="/add-credential"
                                     >
-                                        ➕ Add Credential
+                                        Add Credential
                                     </Link>
-
                                 </li>
 
                                 <li>
-
                                     <Link
                                         className="dropdown-item"
                                         to="/credentials"
                                     >
-                                        📋 View Credentials
+                                        View Credentials
                                     </Link>
-
                                 </li>
 
                             </ul>
@@ -124,7 +111,7 @@ function Navbar() {
                                 className="nav-link fw-semibold text-secondary"
                                 to="/profile"
                             >
-                                👤 Profile
+                                Profile
                             </Link>
 
                         </li>
