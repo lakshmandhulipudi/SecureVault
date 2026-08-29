@@ -12,9 +12,15 @@ function Dashboard() {
 
     const [credentials, setCredentials] = useState([]);
 
+
+    // ==========================================
+    // LOAD CREDENTIALS
+    // ==========================================
+
     useEffect(() => {
         loadCredentials();
     }, []);
+
 
     const loadCredentials = async () => {
 
@@ -34,63 +40,123 @@ function Dashboard() {
 
     };
 
+
+    // ==========================================
+    // STATISTICS
+    // ==========================================
+
     const favouriteCount =
         credentials.filter(c => c.favourite).length;
 
     const categoryCount =
         new Set(credentials.map(c => c.category)).size;
 
+
+    // ==========================================
+    // SECURITY NAVIGATION
+    // ==========================================
+
     const handleSecurityChange = (e) => {
 
         const value = e.target.value;
 
+
         if (value === "login-activities") {
+
             navigate("/login-activities");
+
         }
+
 
         if (value === "suspicious-activity") {
+
             navigate("/suspicious-activity");
+
         }
+
 
         if (value === "security-alerts") {
+
             navigate("/security-alerts");
+
         }
 
+
         if (value === "audit-logs") {
+
             navigate("/audit-logs");
+
+        }
+
+
+        if (value === "analytics") {
+
+            navigate("/security-analytics");
+
+        }
+
+
+        // Security Reports
+
+        if (value === "security-reports") {
+
+            navigate("/security-reports");
+
         }
 
     };
 
+
+    // ==========================================
+    // UI
+    // ==========================================
+
     return (
 
         <>
+
             <Navbar />
+
 
             <div
                 className="container py-5"
-                style={{ maxWidth: "1150px" }}
+                style={{
+                    maxWidth: "1150px"
+                }}
             >
 
-                {/* Welcome */}
+
+                {/* =========================
+                    WELCOME
+                ========================= */}
+
                 <div className="mb-5">
 
                     <h2 className="fw-bold mb-2">
+
                         Welcome, {username}
+
                     </h2>
 
                     <p className="text-muted mb-0">
+
                         Manage your passwords and credentials securely
                         from one place.
+
                     </p>
 
                 </div>
 
 
-                {/* Statistics */}
+                {/* =========================
+                    STATISTICS
+                ========================= */}
+
                 <div className="row g-4 mb-4">
 
-                    {/* Total Credentials */}
+
+                    {/* TOTAL CREDENTIALS */}
+
                     <div className="col-md-4">
 
                         <div
@@ -103,7 +169,9 @@ function Dashboard() {
                             <div className="card-body p-4">
 
                                 <p className="text-muted mb-2 fw-semibold">
+
                                     Total Credentials
+
                                 </p>
 
                                 <h1
@@ -112,7 +180,9 @@ function Dashboard() {
                                         color: "#2563eb"
                                     }}
                                 >
+
                                     {credentials.length}
+
                                 </h1>
 
                             </div>
@@ -122,7 +192,8 @@ function Dashboard() {
                     </div>
 
 
-                    {/* Favourite */}
+                    {/* FAVOURITE */}
+
                     <div className="col-md-4">
 
                         <div
@@ -135,7 +206,9 @@ function Dashboard() {
                             <div className="card-body p-4">
 
                                 <p className="text-muted mb-2 fw-semibold">
+
                                     Favourite Credentials
+
                                 </p>
 
                                 <h1
@@ -144,7 +217,9 @@ function Dashboard() {
                                         color: "#16a34a"
                                     }}
                                 >
+
                                     {favouriteCount}
+
                                 </h1>
 
                             </div>
@@ -154,7 +229,8 @@ function Dashboard() {
                     </div>
 
 
-                    {/* Categories */}
+                    {/* CATEGORIES */}
+
                     <div className="col-md-4">
 
                         <div
@@ -167,7 +243,9 @@ function Dashboard() {
                             <div className="card-body p-4">
 
                                 <p className="text-muted mb-2 fw-semibold">
+
                                     Categories
+
                                 </p>
 
                                 <h1
@@ -176,7 +254,9 @@ function Dashboard() {
                                         color: "#ea580c"
                                     }}
                                 >
+
                                     {categoryCount}
+
                                 </h1>
 
                             </div>
@@ -188,31 +268,48 @@ function Dashboard() {
                 </div>
 
 
-                {/* Bottom Section */}
+                {/* =========================
+                    BOTTOM SECTION
+                ========================= */}
+
                 <div className="row g-4">
 
-                    {/* Quick Actions */}
+
+                    {/* =========================
+                        QUICK ACTIONS
+                    ========================= */}
+
                     <div className="col-lg-5">
 
-                        <div className="card h-100 border-0 shadow-sm rounded-4">
+                        <div
+                            className="card h-100 border-0 shadow-sm rounded-4"
+                        >
 
                             <div className="card-body p-4">
+
 
                                 <div className="mb-4">
 
                                     <h4 className="fw-bold mb-1">
+
                                         Quick Actions
+
                                     </h4>
 
                                     <p className="text-muted small mb-0">
+
                                         Access your credentials and security
                                         information.
+
                                     </p>
 
                                 </div>
 
 
                                 <div className="d-grid gap-3">
+
+
+                                    {/* ADD CREDENTIAL */}
 
                                     <button
                                         type="button"
@@ -221,9 +318,13 @@ function Dashboard() {
                                             navigate("/add-credential")
                                         }
                                     >
+
                                         Add Credential
+
                                     </button>
 
+
+                                    {/* VIEW CREDENTIALS */}
 
                                     <button
                                         type="button"
@@ -232,16 +333,24 @@ function Dashboard() {
                                             navigate("/credentials")
                                         }
                                     >
+
                                         View All Credentials
+
                                     </button>
 
 
-                                    {/* Security */}
+                                    {/* =========================
+                                        SECURITY
+                                    ========================= */}
+
                                     <div className="mt-2">
 
                                         <label className="form-label fw-semibold mb-2">
+
                                             Security
+
                                         </label>
+
 
                                         <select
                                             className="form-select"
@@ -249,29 +358,74 @@ function Dashboard() {
                                             onChange={handleSecurityChange}
                                         >
 
-                                            <option value="" disabled>
+                                            <option
+                                                value=""
+                                                disabled
+                                            >
+
                                                 Select security activity
+
                                             </option>
+
+
+                                            {/* LOGIN ACTIVITIES */}
 
                                             <option value="login-activities">
+
                                                 Login Activities
+
                                             </option>
+
+
+                                            {/* SUSPICIOUS ACTIVITY */}
 
                                             <option value="suspicious-activity">
+
                                                 Suspicious Activity
+
                                             </option>
+
+
+                                            {/* SECURITY ALERTS */}
 
                                             <option value="security-alerts">
+
                                                 Security Alerts
+
                                             </option>
 
+
+                                            {/* AUDIT LOGS */}
+
                                             <option value="audit-logs">
+
                                                 Audit Logs
+
                                             </option>
+
+
+                                            {/* SECURITY ANALYTICS */}
+
+                                            <option value="analytics">
+
+                                                Security Analytics
+
+                                            </option>
+
+
+                                            {/* SECURITY REPORTS */}
+
+                                            <option value="security-reports">
+
+                                                Security Reports
+
+                                            </option>
+
 
                                         </select>
 
                                     </div>
+
 
                                 </div>
 
@@ -282,26 +436,39 @@ function Dashboard() {
                     </div>
 
 
-                    {/* Recent Credentials */}
+                    {/* =========================
+                        RECENT CREDENTIALS
+                    ========================= */}
+
                     <div className="col-lg-7">
 
-                        <div className="card border-0 shadow-sm rounded-4">
+                        <div
+                            className="card border-0 shadow-sm rounded-4"
+                        >
 
                             <div className="card-body p-4">
 
-                                <div className="d-flex justify-content-between align-items-center mb-4">
+
+                                <div
+                                    className="d-flex justify-content-between align-items-center mb-4"
+                                >
 
                                     <div>
 
                                         <h4 className="fw-bold mb-1">
+
                                             Recent Credentials
+
                                         </h4>
 
                                         <p className="text-muted small mb-0">
+
                                             Your recently added credentials.
+
                                         </p>
 
                                     </div>
+
 
                                     {credentials.length > 0 && (
 
@@ -312,13 +479,19 @@ function Dashboard() {
                                                 navigate("/credentials")
                                             }
                                         >
+
                                             View All
+
                                         </button>
 
                                     )}
 
                                 </div>
 
+
+                                {/* =========================
+                                    NO CREDENTIALS
+                                ========================= */}
 
                                 {credentials.length === 0 ? (
 
@@ -330,13 +503,19 @@ function Dashboard() {
                                     >
 
                                         <h6 className="fw-semibold">
+
                                             No credentials yet
+
                                         </h6>
 
+
                                         <p className="text-muted small mb-3">
+
                                             Add your first credential to
                                             get started.
+
                                         </p>
+
 
                                         <button
                                             type="button"
@@ -345,12 +524,18 @@ function Dashboard() {
                                                 navigate("/add-credential")
                                             }
                                         >
+
                                             Add Credential
+
                                         </button>
 
                                     </div>
 
                                 ) : (
+
+                                    /* =========================
+                                        RECENT CREDENTIALS
+                                    ========================= */
 
                                     credentials
                                         .slice(-5)
@@ -365,19 +550,27 @@ function Dashboard() {
                                                 }}
                                             >
 
-                                                <div className="d-flex justify-content-between align-items-center">
+                                                <div
+                                                    className="d-flex justify-content-between align-items-center"
+                                                >
 
                                                     <div>
 
                                                         <h6 className="fw-bold mb-1">
+
                                                             {c.website}
+
                                                         </h6>
 
+
                                                         <small className="text-muted">
+
                                                             {c.username}
+
                                                         </small>
 
                                                     </div>
+
 
                                                     <span
                                                         className="badge rounded-pill"
@@ -387,7 +580,9 @@ function Dashboard() {
                                                             fontWeight: "500"
                                                         }}
                                                     >
+
                                                         {c.category}
+
                                                     </span>
 
                                                 </div>
@@ -398,18 +593,24 @@ function Dashboard() {
 
                                 )}
 
+
                             </div>
 
                         </div>
 
                     </div>
 
+
                 </div>
+
 
             </div>
 
         </>
+
     );
+
 }
+
 
 export default Dashboard;

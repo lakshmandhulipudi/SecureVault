@@ -45,3 +45,30 @@ backend/target/
 # OS
 .DS_Store
 Thumbs.db
+# Node
+node_modules/
+frontend/node_modules/
+
+# React/Vite
+frontend/dist/
+frontend/.vite/
+
+# Java
+backend/target/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*

@@ -2,32 +2,41 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
+// Authentication
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import VerifyOtp from "./pages/VerifyOtp";
 import ResetPassword from "./pages/ResetPassword";
 
+// Main pages
 import Dashboard from "./pages/Dashboard";
 import AddCredential from "./pages/AddCredential";
 import Credentials from "./pages/Credentials";
 import UpdateCredential from "./pages/UpdateCredential";
 import Profile from "./pages/Profile";
 
+// Security Analytics
+import SecurityAnalytics from "./pages/SecurityAnalytics";
+
+// Security monitoring pages
 import LoginActivities from "./pages/LoginActivities";
 import SuspiciousActivity from "./pages/SuspiciousActivity";
 import SecurityAlerts from "./pages/SecurityAlerts";
 import AuditLogs from "./pages/AuditLogs";
 
+import SecurityReports from "./pages/SecurityReports";
+
 function App() {
 
     return (
-
         <BrowserRouter>
 
             <Routes>
 
-                {/* Authentication */}
+                {/* =========================
+                    AUTHENTICATION
+                ========================= */}
 
                 <Route
                     path="/"
@@ -55,7 +64,9 @@ function App() {
                 />
 
 
-                {/* Dashboard */}
+                {/* =========================
+                    DASHBOARD
+                ========================= */}
 
                 <Route
                     path="/dashboard"
@@ -67,7 +78,9 @@ function App() {
                 />
 
 
-                {/* Credentials */}
+                {/* =========================
+                    CREDENTIALS
+                ========================= */}
 
                 <Route
                     path="/add-credential"
@@ -97,7 +110,9 @@ function App() {
                 />
 
 
-                {/* Profile */}
+                {/* =========================
+                    PROFILE
+                ========================= */}
 
                 <Route
                     path="/profile"
@@ -109,7 +124,23 @@ function App() {
                 />
 
 
-                {/* Security */}
+                {/* =========================
+                    SECURITY ANALYTICS
+                ========================= */}
+
+                <Route
+                    path="/security-analytics"
+                    element={
+                        <ProtectedRoute>
+                            <SecurityAnalytics />
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                {/* =========================
+                    SECURITY MONITORING
+                ========================= */}
 
                 <Route
                     path="/login-activities"
@@ -146,13 +177,20 @@ function App() {
                         </ProtectedRoute>
                     }
                 />
+                <Route
+    path="/security-reports"
+    element={
+        <ProtectedRoute>
+            <SecurityReports />
+        </ProtectedRoute>
+    }
+/>
 
             </Routes>
+            
 
         </BrowserRouter>
-
     );
-
 }
 
 export default App;
