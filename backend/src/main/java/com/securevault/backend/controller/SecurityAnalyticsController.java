@@ -1,5 +1,9 @@
 package com.securevault.backend.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,22 +28,71 @@ public class SecurityAnalyticsController {
                 securityAnalyticsService;
     }
 
-    // Get security analytics for a specific user
+    // ==========================================
+    // GET SECURITY ANALYTICS FOR A USER
+    // ==========================================
+
     @GetMapping
-    public ResponseEntity<SecurityAnalyticsResponse> getAnalytics(
+    public ResponseEntity<?> getAnalytics(
             @RequestParam String email) {
 
-        return ResponseEntity.ok(
-                securityAnalyticsService.getAnalytics(email)
-        );
+        try {
+
+            SecurityAnalyticsResponse response =
+                    securityAnalyticsService.getAnalytics(email);
+
+            return ResponseEntity.ok(response);
+
+        } catch (RuntimeException e) {
+
+            Map<String, String> error =
+                    new HashMap<>();
+
+            error.put("error", "User not found");
+            error.put(
+                    "message",
+                    "No user exists with the provided email"
+            );
+
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(error);
+        }
     }
 
-    // Get security analytics for all users
-    @GetMapping("/all")
-    public ResponseEntity<SecurityAnalyticsResponse> getAllAnalytics() {
 
-        return ResponseEntity.ok(
-                securityAnalyticsService.getAllAnalytics()
-        );
+    // ==========================================
+    // GET SECURITY ANALYTICS FOR ALL USERS
+    // ==========================================
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllAnalytics() {
+
+        try {
+
+            SecurityAnalyticsResponse response =
+                    securityAnalyticsService.getAllAnalytics();
+
+            return ResponseEntity.ok(response);
+
+        } catch (RuntimeException e) {
+
+            Map<String, String> error =
+                    new HashMap<>();
+
+            error.put(
+                    "error",
+                    "Unable to generate security analytics"
+            );
+
+            error.put(
+                    "message",
+                    e.getMessage()
+            );
+
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(error);
+        }
     }
 }

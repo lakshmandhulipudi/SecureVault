@@ -290,6 +290,18 @@ public class ReportService {
             getLoginActivityReport(
                     String email) {
 
+        // ==========================================
+        // VALIDATE USER
+        // ==========================================
+
+        userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
+
+
+        // ==========================================
+        // GET LOGIN ACTIVITIES
+        // ==========================================
 
         List<LoginActivityResponse>
                 activities =
@@ -325,6 +337,10 @@ public class ReportService {
         }
 
 
+        // ==========================================
+        // CALCULATE LOGIN PERCENTAGES
+        // ==========================================
+
         double successfulPercentage = 0;
 
         double failedPercentage = 0;
@@ -355,6 +371,10 @@ public class ReportService {
                 ) / 100.0;
 
 
+        // ==========================================
+        // RECENT LOGIN ACTIVITIES
+        // ==========================================
+
         // Show only 10 recent activities
 
         List<LoginActivityResponse>
@@ -363,6 +383,10 @@ public class ReportService {
                         .limit(10)
                         .toList();
 
+
+        // ==========================================
+        // RETURN REPORT
+        // ==========================================
 
         return new LoginActivityReportResponse(
 
