@@ -25,19 +25,25 @@ public class AuthService {
     private final OtpRepository otpRepository;
     private final LoginActivityRepository loginActivityRepository;
     private final SuspiciousActivityService suspiciousActivityService;
+    private final NotificationService notificationService;
+    private final EmailService emailService;
 
     public AuthService(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
             OtpRepository otpRepository,
             LoginActivityRepository loginActivityRepository,
-            SuspiciousActivityService suspiciousActivityService) {
+            SuspiciousActivityService suspiciousActivityService,
+            NotificationService notificationService,
+            EmailService emailService) {
 
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.otpRepository = otpRepository;
         this.loginActivityRepository = loginActivityRepository;
         this.suspiciousActivityService = suspiciousActivityService;
+        this.notificationService = notificationService;
+        this.emailService = emailService;
     }
 
     // Register User
@@ -122,6 +128,20 @@ public class AuthService {
                 user,
                 user.getEmail(),
                 LoginStatus.SUCCESS
+        );
+
+        // Create login notification
+        notificationService.createNotification(
+                user.getEmail(),
+                "LOGIN",
+                "New Login Detected",
+                "New login detected on your SecureVault account."
+        );
+
+        // Send login notification email
+        emailService.sendLoginNotificationEmail(
+                user.getEmail(),
+                user.getUsername()
         );
 
         // Analyze recent activity after successful login

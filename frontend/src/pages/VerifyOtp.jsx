@@ -16,7 +16,7 @@ function VerifyOtp() {
     try {
 
       const response = await axios.post(
-        "http://localhost:8080/api/password/verify",
+        "/api/password/verify",
         {
           email: email,
           otp: otp

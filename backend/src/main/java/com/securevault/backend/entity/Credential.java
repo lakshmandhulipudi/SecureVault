@@ -1,5 +1,7 @@
 package com.securevault.backend.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,6 +29,8 @@ public class Credential {
     private String category;
 
     private boolean favourite;
+
+    private LocalDateTime passwordUpdatedAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -81,6 +85,16 @@ public class Credential {
 
     public void setFavourite(boolean favourite) {
         this.favourite = favourite;
+    }
+
+    public LocalDateTime getPasswordUpdatedAt() {
+        return passwordUpdatedAt;
+    }
+
+    public void setPasswordUpdatedAt(
+            LocalDateTime passwordUpdatedAt) {
+
+        this.passwordUpdatedAt = passwordUpdatedAt;
     }
 
     public User getUser() {

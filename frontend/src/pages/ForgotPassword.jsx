@@ -22,7 +22,7 @@ function ForgotPassword() {
 
             const response = await axios.post(
 
-                "http://localhost:8080/api/password/forgot",
+                "/api/password/forgot",
 
                 {
                     email

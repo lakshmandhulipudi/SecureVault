@@ -1,5 +1,6 @@
 package com.securevault.backend.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -36,7 +37,10 @@ public class CredentialService {
         this.credentialShareRepository = credentialShareRepository;
     }
 
+    // ==========================================
     // Add Credential
+    // ==========================================
+
     public Credential addCredential(
             String email,
             CredentialRequest request) {
@@ -47,23 +51,43 @@ public class CredentialService {
 
         Credential credential = new Credential();
 
-        credential.setWebsite(request.getWebsite());
-        credential.setUsername(request.getUsername());
+        credential.setWebsite(
+                request.getWebsite());
+
+        credential.setUsername(
+                request.getUsername());
 
         // Encrypt password before storing
         credential.setPassword(
-                AESUtil.encrypt(request.getPassword())
+                AESUtil.encrypt(
+                        request.getPassword()
+                )
         );
 
-        credential.setCategory(request.getCategory());
-        credential.setFavourite(request.isFavourite());
+        // Record password creation/update time
+        credential.setPasswordUpdatedAt(
+                LocalDateTime.now()
+        );
+
+        credential.setCategory(
+                request.getCategory());
+
+        credential.setFavourite(
+                request.isFavourite());
+
         credential.setUser(user);
 
-        return credentialRepository.save(credential);
+        return credentialRepository.save(
+                credential
+        );
     }
 
+    // ==========================================
     // View Own + Shared Credentials
-    public List<CredentialResponse> getCredentials(String email) {
+    // ==========================================
+
+    public List<CredentialResponse> getCredentials(
+            String email) {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
@@ -75,7 +99,8 @@ public class CredentialService {
 
         // Shared credentials
         List<CredentialShare> shares =
-                credentialShareRepository.findBySharedWithUser(user);
+                credentialShareRepository
+                        .findBySharedWithUser(user);
 
         /*
          * LinkedHashMap prevents duplicate credentials
@@ -140,7 +165,10 @@ public class CredentialService {
         );
     }
 
+    // ==========================================
     // Convert Credential entity to response DTO
+    // ==========================================
+
     private CredentialResponse convertToResponse(
             Credential credential,
             Permission permission) {
@@ -148,9 +176,14 @@ public class CredentialService {
         CredentialResponse response =
                 new CredentialResponse();
 
-        response.setId(credential.getId());
-        response.setWebsite(credential.getWebsite());
-        response.setUsername(credential.getUsername());
+        response.setId(
+                credential.getId());
+
+        response.setWebsite(
+                credential.getWebsite());
+
+        response.setUsername(
+                credential.getUsername());
 
         // Decrypt only when sending response
         response.setPassword(
@@ -167,12 +200,17 @@ public class CredentialService {
                 credential.isFavourite()
         );
 
-        response.setPermission(permission);
+        response.setPermission(
+                permission
+        );
 
         return response;
     }
 
+    // ==========================================
     // Check whether user can view credential
+    // ==========================================
+
     public boolean canView(
             Long credentialId,
             String email) {
@@ -185,7 +223,10 @@ public class CredentialService {
         return true;
     }
 
+    // ==========================================
     // Check whether user can edit credential
+    // ==========================================
+
     public boolean canEdit(
             Long credentialId,
             String email) {
@@ -200,7 +241,10 @@ public class CredentialService {
                 || permission == Permission.FULL;
     }
 
+    // ==========================================
     // Check whether user can delete credential
+    // ==========================================
+
     public boolean canDelete(
             Long credentialId,
             String email) {
@@ -214,7 +258,10 @@ public class CredentialService {
         return permission == Permission.FULL;
     }
 
+    // ==========================================
     // Check whether user can manage sharing
+    // ==========================================
+
     public boolean canManageSharing(
             Long credentialId,
             String email) {
@@ -228,7 +275,10 @@ public class CredentialService {
         return permission == Permission.FULL;
     }
 
+    // ==========================================
     // Get user's permission for a credential
+    // ==========================================
+
     public Permission getUserPermission(
             Long credentialId,
             String email) {
@@ -288,7 +338,10 @@ public class CredentialService {
         );
     }
 
+    // ==========================================
     // Update Credential
+    // ==========================================
+
     public Credential updateCredential(
             Long id,
             String email,
@@ -333,6 +386,11 @@ public class CredentialService {
                 )
         );
 
+        // Update password modification time
+        credential.setPasswordUpdatedAt(
+                LocalDateTime.now()
+        );
+
         credential.setCategory(
                 request.getCategory()
         );
@@ -346,7 +404,10 @@ public class CredentialService {
         );
     }
 
+    // ==========================================
     // Delete Credential
+    // ==========================================
+
     @Transactional
     public void deleteCredential(
             Long id,

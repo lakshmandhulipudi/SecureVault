@@ -17,14 +17,24 @@ public class CredentialShareService {
     private final CredentialShareRepository credentialShareRepository;
     private final UserRepository userRepository;
 
+    // Notification Module
+    private final NotificationService notificationService;
+    private final EmailService emailService;
+
     public CredentialShareService(
             CredentialRepository credentialRepository,
             CredentialShareRepository credentialShareRepository,
-            UserRepository userRepository) {
+            UserRepository userRepository,
+            NotificationService notificationService,
+            EmailService emailService) {
 
         this.credentialRepository = credentialRepository;
         this.credentialShareRepository = credentialShareRepository;
         this.userRepository = userRepository;
+
+        // Notification Module
+        this.notificationService = notificationService;
+        this.emailService = emailService;
     }
 
     public void shareCredential(
@@ -92,5 +102,25 @@ public class CredentialShareService {
 
         // Save share record
         credentialShareRepository.save(credentialShare);
+
+        // Create in-app notification for recipient
+        notificationService.createNotification(
+                recipient,
+                "CREDENTIAL_SHARED",
+                "Credential Shared With You",
+                "A credential has been shared with you by "
+                        + owner.getUsername()
+                        + ". Permission: "
+                        + permission.name()
+                        + "."
+        );
+
+        // Send email notification to recipient
+        emailService.sendCredentialShareEmail(
+                recipient.getEmail(),
+                recipient.getUsername(),
+                owner.getUsername(),
+                permission.name()
+        );
     }
 }

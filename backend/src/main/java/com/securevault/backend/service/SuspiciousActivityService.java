@@ -27,21 +27,35 @@ public class SuspiciousActivityService {
     private final SecurityAlertService securityAlertService;
     private final AuditLogService auditLogService;
 
+    // Notification Module
+    private final NotificationService notificationService;
+    private final EmailService emailService;
+
     public SuspiciousActivityService(
             LoginActivityRepository loginActivityRepository,
             SuspiciousActivityRepository suspiciousActivityRepository,
             UserRepository userRepository,
             SecurityAlertService securityAlertService,
-            AuditLogService auditLogService) {
+            AuditLogService auditLogService,
+            NotificationService notificationService,
+            EmailService emailService) {
 
         this.loginActivityRepository = loginActivityRepository;
         this.suspiciousActivityRepository = suspiciousActivityRepository;
         this.userRepository = userRepository;
+
         this.securityAlertService = securityAlertService;
         this.auditLogService = auditLogService;
+
+        // Notification Module
+        this.notificationService = notificationService;
+        this.emailService = emailService;
     }
 
+    // =====================================================
     // Analyze login activities for a user
+    // =====================================================
+
     public SuspiciousActivity analyzeActivity(String email) {
 
         User user = userRepository
@@ -66,13 +80,19 @@ public class SuspiciousActivityService {
                                 .isBefore(windowStart))
                 .count();
 
+        // =====================================================
         // Suspicious activity not detected
+        // =====================================================
+
         if (failedAttempts < FAILED_LOGIN_THRESHOLD) {
             return null;
         }
 
+        // =====================================================
         // Check whether suspicious activity was already
         // created recently for this user
+        // =====================================================
+
         List<SuspiciousActivity> existingActivities =
                 suspiciousActivityRepository
                         .findByUserOrderByDetectedAtDesc(user);
@@ -89,7 +109,10 @@ public class SuspiciousActivityService {
             }
         }
 
+        // =====================================================
         // Create suspicious activity
+        // =====================================================
+
         SuspiciousActivity suspiciousActivity =
                 new SuspiciousActivity();
 
@@ -117,20 +140,51 @@ public class SuspiciousActivityService {
                         suspiciousActivity
                 );
 
+        // =====================================================
         // Create Security Alert automatically
+        // =====================================================
+
         securityAlertService.createAlert(savedActivity);
 
+        // =====================================================
         // Create Audit Log automatically
+        // =====================================================
+
         auditLogService.createLog(
                 user.getId(),
                 "SUSPICIOUS_ACTIVITY",
                 savedActivity.getDescription()
         );
 
+        // =====================================================
+        // NOTIFICATION MODULE
+        // =====================================================
+
+        // Create in-app security notification
+        notificationService.createNotification(
+                user,
+                "SECURITY_ALERT",
+                "Suspicious Activity Detected",
+                "Multiple failed login attempts were detected on your SecureVault account."
+        );
+
+        // =====================================================
+        // Send security alert email
+        // =====================================================
+
+        emailService.sendSecurityAlertEmail(
+                user.getEmail(),
+                user.getUsername(),
+                savedActivity.getDescription()
+        );
+
         return savedActivity;
     }
 
+    // =====================================================
     // Get suspicious activities for a user
+    // =====================================================
+
     public List<SuspiciousActivity>
             getSuspiciousActivities(String email) {
 
@@ -143,7 +197,10 @@ public class SuspiciousActivityService {
                 .findByUserOrderByDetectedAtDesc(user);
     }
 
+    // =====================================================
     // Get all suspicious activities
+    // =====================================================
+
     public List<SuspiciousActivity>
             getAllSuspiciousActivities() {
 
