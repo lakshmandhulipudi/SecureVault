@@ -1,6 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "../services/api";
 
 function ForgotPassword() {
 
@@ -10,7 +10,7 @@ function ForgotPassword() {
 
     const sendOtp = async () => {
 
-        if (!email) {
+        if (!email.trim()) {
 
             alert("Please enter your email");
 
@@ -20,35 +20,45 @@ function ForgotPassword() {
 
         try {
 
-            const response = await axios.post(
-
-                "/api/password/forgot",
-
+            const response = await api.post(
+                "/password/forgot",
                 {
-                    email
+                    email: email.trim()
                 }
-
             );
 
-            alert(response.data);
+            alert(
+                response.data?.message ||
+                response.data ||
+                "OTP sent successfully"
+            );
 
             navigate("/verify-otp", {
-
                 state: {
-                    email
+                    email: email.trim()
                 }
-
             });
 
         } catch (error) {
 
+            console.error(
+                "Forgot password error:",
+                error
+            );
+
             if (error.response) {
 
-                alert(error.response.data);
+                alert(
+                    error.response.data?.message ||
+                    error.response.data ||
+                    "Failed to send OTP"
+                );
 
             } else {
 
-                alert("Server not running");
+                alert(
+                    "Unable to connect to SecureVault server."
+                );
 
             }
 
@@ -82,15 +92,11 @@ function ForgotPassword() {
                         <h1>📧</h1>
 
                         <h2 className="fw-bold">
-
                             Forgot Password
-
                         </h2>
 
                         <p className="text-muted">
-
                             Enter your registered email to receive an OTP.
-
                         </p>
 
                     </div>
@@ -98,9 +104,7 @@ function ForgotPassword() {
                     <div className="mb-4">
 
                         <label className="fw-semibold">
-
                             Email Address
-
                         </label>
 
                         <input
@@ -119,9 +123,7 @@ function ForgotPassword() {
                         className="btn btn-primary btn-lg w-100"
                         onClick={sendOtp}
                     >
-
                         📩 Send OTP
-
                     </button>
 
                     <hr />
@@ -130,9 +132,7 @@ function ForgotPassword() {
                         className="btn btn-outline-secondary w-100"
                         onClick={() => navigate("/")}
                     >
-
                         ⬅ Back to Login
-
                     </button>
 
                 </div>
