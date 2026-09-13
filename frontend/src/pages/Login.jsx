@@ -1,6 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "../services/api";
 
 function Login() {
 
@@ -14,8 +14,8 @@ function Login() {
 
         try {
 
-            const response = await axios.post(
-                "/api/auth/login",
+            const response = await api.post(
+                "/auth/login",
                 {
                     email,
                     password
@@ -24,8 +24,15 @@ function Login() {
 
             alert(response.data.message);
 
-            localStorage.setItem("email", response.data.email);
-            localStorage.setItem("username", response.data.username);
+            localStorage.setItem(
+                "email",
+                response.data.email
+            );
+
+            localStorage.setItem(
+                "username",
+                response.data.username
+            );
 
             navigate("/dashboard");
 
@@ -33,7 +40,10 @@ function Login() {
 
             if (error.response) {
 
-                alert(error.response.data.message || "Login Failed");
+                alert(
+                    error.response.data.message ||
+                    "Login Failed"
+                );
 
             } else {
 
@@ -129,13 +139,18 @@ function Login() {
                             />
 
                             <button
+                                type="button"
                                 className="btn btn-outline-secondary"
                                 onClick={() =>
-                                    setShowPassword(!showPassword)
+                                    setShowPassword(
+                                        !showPassword
+                                    )
                                 }
                             >
 
-                                {showPassword ? "🙈" : "👁"}
+                                {showPassword
+                                    ? "🙈"
+                                    : "👁"}
 
                             </button>
 
