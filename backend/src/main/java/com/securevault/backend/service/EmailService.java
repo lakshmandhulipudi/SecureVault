@@ -44,7 +44,24 @@ public class EmailService {
                         + "please ignore this email."
         );
 
-        mailSender.send(message);
+        try {
+
+            mailSender.send(message);
+
+            System.out.println(
+                    "OTP email sent successfully to: "
+                            + toEmail
+            );
+
+        } catch (MailException e) {
+
+            System.err.println(
+                    "OTP email failed: "
+                            + e.getMessage()
+            );
+
+            throw e;
+        }
     }
 
     // ==========================================
