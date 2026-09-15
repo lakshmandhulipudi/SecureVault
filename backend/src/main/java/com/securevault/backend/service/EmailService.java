@@ -2,70 +2,187 @@ package com.securevault.backend.service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class EmailService {
 
-    private final JavaMailSender mailSender;
+    @Value("${BREVO_API_KEY:}")
+    private String brevoApiKey;
 
-    public EmailService(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
-    }
+    @Value("${MAIL_USERNAME:}")
+    private String senderEmail;
+
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    private static final String BREVO_API_URL =
+            "https://api.brevo.com/v3/smtp/email";
+
 
     // ==========================================
-    // Password reset OTP email
+    // Common Brevo Email Sender
+    // ==========================================
+
+    private void sendBrevoEmail(
+            String toEmail,
+            String subject,
+            String textContent) {
+
+        if (brevoApiKey == null || brevoApiKey.isBlank()) {
+            throw new RuntimeException(
+                    "BREVO_API_KEY is not configured"
+            );
+        }
+
+        if (senderEmail == null || senderEmail.isBlank()) {
+            throw new RuntimeException(
+                    "MAIL_USERNAME is not configured"
+            );
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.set(
+                "api-key",
+                brevoApiKey
+        );
+
+        headers.setContentType(
+                MediaType.APPLICATION_JSON
+        );
+
+        headers.setAccept(
+                java.util.List.of(
+                        MediaType.APPLICATION_JSON
+                )
+        );
+
+
+        // Sender information
+        Map<String, String> sender =
+                new HashMap<>();
+
+        sender.put(
+                "name",
+                "SecureVault"
+        );
+
+        sender.put(
+                "email",
+                senderEmail
+        );
+
+
+        // Recipient information
+        Map<String, String> recipient =
+                new HashMap<>();
+
+        recipient.put(
+                "email",
+                toEmail
+        );
+
+
+        // Brevo request body
+        Map<String, Object> requestBody =
+                new HashMap<>();
+
+        requestBody.put(
+                "sender",
+                sender
+        );
+
+        requestBody.put(
+                "to",
+                java.util.List.of(recipient)
+        );
+
+        requestBody.put(
+                "subject",
+                subject
+        );
+
+        requestBody.put(
+                "textContent",
+                textContent
+        );
+
+
+        HttpEntity<Map<String, Object>> request =
+                new HttpEntity<>(
+                        requestBody,
+                        headers
+                );
+
+
+        // Send email using Brevo HTTPS API
+        restTemplate.postForEntity(
+                BREVO_API_URL,
+                request,
+                String.class
+        );
+    }
+
+
+    // ==========================================
+    // Password Reset OTP Email
     // ==========================================
 
     public void sendOtpEmail(
             String toEmail,
             String otp) {
 
-        SimpleMailMessage message =
-                new SimpleMailMessage();
+        String subject =
+                "SecureVault Password Reset OTP";
 
-        message.setTo(toEmail);
-
-        message.setSubject(
-                "SecureVault Password Reset OTP"
-        );
-
-        message.setText(
+        String textContent =
                 "Your SecureVault password reset OTP is: "
                         + otp
                         + "\n\n"
                         + "This OTP is valid for a limited time."
                         + "\n\n"
                         + "If you did not request a password reset, "
-                        + "please ignore this email."
-        );
+                        + "please ignore this email.";
 
         try {
 
-            mailSender.send(message);
+            sendBrevoEmail(
+                    toEmail,
+                    subject,
+                    textContent
+            );
 
             System.out.println(
                     "OTP email sent successfully to: "
                             + toEmail
             );
 
-        } catch (MailException e) {
+        } catch (RuntimeException e) {
 
             System.err.println(
                     "OTP email failed: "
                             + e.getMessage()
             );
 
-            throw e;
+            // OTP process should report the failure
+            throw new RuntimeException(
+                    "Failed to send OTP email",
+                    e
+            );
         }
     }
 
+
     // ==========================================
-    // Successful login notification email
+    // Successful Login Notification Email
     // ==========================================
 
     public void sendLoginNotificationEmail(
@@ -83,16 +200,11 @@ public class EmailService {
         String formattedTime =
                 loginTime.format(formatter);
 
-        SimpleMailMessage message =
-                new SimpleMailMessage();
 
-        message.setTo(toEmail);
+        String subject =
+                "SecureVault - New Login Detected";
 
-        message.setSubject(
-                "SecureVault - New Login Detected"
-        );
-
-        message.setText(
+        String textContent =
                 "Hello " + username + ",\n\n"
                         + "New login detected on your SecureVault account.\n\n"
                         + "Account: " + toEmail + "\n"
@@ -103,19 +215,23 @@ public class EmailService {
                         + "please secure your account immediately."
                         + "\n\n"
                         + "Regards,\n"
-                        + "SecureVault Security Team"
-        );
+                        + "SecureVault Security Team";
+
 
         try {
 
-            mailSender.send(message);
+            sendBrevoEmail(
+                    toEmail,
+                    subject,
+                    textContent
+            );
 
             System.out.println(
                     "Login notification email sent successfully to: "
                             + toEmail
             );
 
-        } catch (MailException e) {
+        } catch (RuntimeException e) {
 
             System.err.println(
                     "Login notification email failed: "
@@ -126,8 +242,9 @@ public class EmailService {
         }
     }
 
+
     // ==========================================
-    // Security alert email
+    // Security Alert Email
     // ==========================================
 
     public void sendSecurityAlertEmail(
@@ -146,16 +263,11 @@ public class EmailService {
         String formattedTime =
                 alertTime.format(formatter);
 
-        SimpleMailMessage message =
-                new SimpleMailMessage();
 
-        message.setTo(toEmail);
+        String subject =
+                "SecureVault - Security Alert";
 
-        message.setSubject(
-                "SecureVault - Security Alert"
-        );
-
-        message.setText(
+        String textContent =
                 "Hello " + username + ",\n\n"
                         + "Suspicious activity was detected "
                         + "on your SecureVault account.\n\n"
@@ -172,19 +284,23 @@ public class EmailService {
                         + "please secure your account immediately "
                         + "and change your password.\n\n"
                         + "Regards,\n"
-                        + "SecureVault Security Team"
-        );
+                        + "SecureVault Security Team";
+
 
         try {
 
-            mailSender.send(message);
+            sendBrevoEmail(
+                    toEmail,
+                    subject,
+                    textContent
+            );
 
             System.out.println(
                     "Security alert email sent successfully to: "
                             + toEmail
             );
 
-        } catch (MailException e) {
+        } catch (RuntimeException e) {
 
             System.err.println(
                     "Security alert email failed: "
@@ -195,8 +311,9 @@ public class EmailService {
         }
     }
 
+
     // ==========================================
-    // Credential sharing notification email
+    // Credential Sharing Notification Email
     // ==========================================
 
     public void sendCredentialShareEmail(
@@ -205,16 +322,10 @@ public class EmailService {
             String ownerUsername,
             String permission) {
 
-        SimpleMailMessage message =
-                new SimpleMailMessage();
+        String subject =
+                "SecureVault - Credential Shared With You";
 
-        message.setTo(toEmail);
-
-        message.setSubject(
-                "SecureVault - Credential Shared With You"
-        );
-
-        message.setText(
+        String textContent =
                 "Hello " + recipientUsername + ",\n\n"
                         + "A credential has been shared with you "
                         + "on your SecureVault account.\n\n"
@@ -229,19 +340,23 @@ public class EmailService {
                         + "Please log in to SecureVault to access the "
                         + "shared credential.\n\n"
                         + "Regards,\n"
-                        + "SecureVault Security Team"
-        );
+                        + "SecureVault Security Team";
+
 
         try {
 
-            mailSender.send(message);
+            sendBrevoEmail(
+                    toEmail,
+                    subject,
+                    textContent
+            );
 
             System.out.println(
                     "Credential sharing email sent successfully to: "
                             + toEmail
             );
 
-        } catch (MailException e) {
+        } catch (RuntimeException e) {
 
             System.err.println(
                     "Credential sharing email failed: "
@@ -252,8 +367,9 @@ public class EmailService {
         }
     }
 
+
     // ==========================================
-    // Password expiration notification email
+    // Password Expiration Notification Email
     // ==========================================
 
     public void sendPasswordExpirationEmail(
@@ -262,22 +378,20 @@ public class EmailService {
             String website,
             boolean expired) {
 
-        SimpleMailMessage message =
-                new SimpleMailMessage();
+        String subject;
+        String textContent;
 
-        message.setTo(toEmail);
 
         // ==========================================
-        // Password already expired
+        // Password Already Expired
         // ==========================================
 
         if (expired) {
 
-            message.setSubject(
-                    "SecureVault - Password Expired"
-            );
+            subject =
+                    "SecureVault - Password Expired";
 
-            message.setText(
+            textContent =
                     "Hello " + username + ",\n\n"
                             + "The password for your credential "
                             + website
@@ -287,22 +401,20 @@ public class EmailService {
                             + "For security reasons, your password "
                             + "is not included in this email.\n\n"
                             + "Regards,\n"
-                            + "SecureVault Security Team"
-            );
-
+                            + "SecureVault Security Team";
         }
 
+
         // ==========================================
-        // Password expiring soon
+        // Password Expiring Soon
         // ==========================================
 
         else {
 
-            message.setSubject(
-                    "SecureVault - Password Expiring Soon"
-            );
+            subject =
+                    "SecureVault - Password Expiring Soon";
 
-            message.setText(
+            textContent =
                     "Hello " + username + ",\n\n"
                             + "The password for your credential "
                             + website
@@ -312,20 +424,24 @@ public class EmailService {
                             + "For security reasons, your password "
                             + "is not included in this email.\n\n"
                             + "Regards,\n"
-                            + "SecureVault Security Team"
-            );
+                            + "SecureVault Security Team";
         }
+
 
         try {
 
-            mailSender.send(message);
+            sendBrevoEmail(
+                    toEmail,
+                    subject,
+                    textContent
+            );
 
             System.out.println(
                     "Password expiration email sent successfully to: "
                             + toEmail
             );
 
-        } catch (MailException e) {
+        } catch (RuntimeException e) {
 
             System.err.println(
                     "Password expiration email failed: "
