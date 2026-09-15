@@ -46,17 +46,26 @@ public class AuthService {
         this.emailService = emailService;
     }
 
+    // ==========================================
     // Register User
+    // ==========================================
     public User register(RegisterRequest request) {
 
-        if (userRepository.existsByEmail(request.getEmail())) {
+        String email = request.getEmail()
+                .trim()
+                .toLowerCase();
+
+        String username = request.getUsername()
+                .trim();
+
+        if (userRepository.existsByEmail(email)) {
 
             throw new RuntimeException(
                     "Email already exists"
             );
         }
 
-        if (userRepository.existsByUsername(request.getUsername())) {
+        if (userRepository.existsByUsername(username)) {
 
             throw new RuntimeException(
                     "Username already exists"
@@ -65,8 +74,8 @@ public class AuthService {
 
         User user = new User();
 
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
+        user.setUsername(username);
+        user.setEmail(email);
 
         user.setPassword(
                 passwordEncoder.encode(
@@ -77,23 +86,32 @@ public class AuthService {
         return userRepository.save(user);
     }
 
+    // ==========================================
     // Login User
+    // ==========================================
     public LoginResponse login(LoginRequest request) {
 
+        // Normalize email
+        String email = request.getEmail()
+                .trim()
+                .toLowerCase();
+
         User user = userRepository
-                .findByEmail(request.getEmail())
+                .findByEmail(email)
                 .orElse(null);
 
+        // ==========================================
         // User does not exist
+        // ==========================================
         if (user == null) {
 
             saveLoginActivity(
                     null,
-                    request.getEmail(),
+                    email,
                     LoginStatus.FAILED
             );
 
-            // Cannot analyze using user-specific
+            // Cannot analyze user-specific
             // suspicious activity because user does not exist.
 
             throw new RuntimeException(
@@ -101,7 +119,9 @@ public class AuthService {
             );
         }
 
+        // ==========================================
         // Password is incorrect
+        // ==========================================
         if (!passwordEncoder.matches(
                 request.getPassword(),
                 user.getPassword())) {
@@ -123,14 +143,18 @@ public class AuthService {
             );
         }
 
+        // ==========================================
         // Login successful
+        // ==========================================
         saveLoginActivity(
                 user,
                 user.getEmail(),
                 LoginStatus.SUCCESS
         );
 
+        // ==========================================
         // Create login notification
+        // ==========================================
         notificationService.createNotification(
                 user.getEmail(),
                 "LOGIN",
@@ -138,19 +162,26 @@ public class AuthService {
                 "New login detected on your SecureVault account."
         );
 
+        // ==========================================
         // Send login notification email
+        // ==========================================
         emailService.sendLoginNotificationEmail(
                 user.getEmail(),
                 user.getUsername()
         );
 
-        // Analyze recent activity after successful login
-        // This also allows the system to detect previous
-        // repeated failed attempts.
+        // ==========================================
+        // Analyze recent activity
+        // ==========================================
+        // This also allows the system to detect
+        // previous repeated failed attempts.
         suspiciousActivityService.analyzeActivity(
                 user.getEmail()
         );
 
+        // ==========================================
+        // Return login response
+        // ==========================================
         return new LoginResponse(
                 "Login Successful",
                 user.getUsername(),
@@ -159,7 +190,9 @@ public class AuthService {
         );
     }
 
+    // ==========================================
     // Save Login Activity
+    // ==========================================
     private void saveLoginActivity(
             User user,
             String email,
@@ -178,12 +211,18 @@ public class AuthService {
         loginActivityRepository.save(activity);
     }
 
+    // ==========================================
     // Reset Password
+    // ==========================================
     public String resetPassword(
             ResetPasswordRequest request) {
 
+        String email = request.getEmail()
+                .trim()
+                .toLowerCase();
+
         User user = userRepository
-                .findByEmail(request.getEmail())
+                .findByEmail(email)
                 .orElseThrow(() ->
                         new RuntimeException(
                                 "User not found"
@@ -191,9 +230,7 @@ public class AuthService {
                 );
 
         Otp otp = otpRepository
-                .findTopByEmailOrderByIdDesc(
-                        request.getEmail()
-                )
+                .findTopByEmailOrderByIdDesc(email)
                 .orElseThrow(() ->
                         new RuntimeException(
                                 "OTP not found"
@@ -220,11 +257,17 @@ public class AuthService {
         return "Password Reset Successful";
     }
 
+    // ==========================================
     // Get Profile
+    // ==========================================
     public User getProfile(String email) {
 
+        String normalizedEmail = email
+                .trim()
+                .toLowerCase();
+
         return userRepository
-                .findByEmail(email)
+                .findByEmail(normalizedEmail)
                 .orElseThrow(() ->
                         new RuntimeException(
                                 "User not found"
